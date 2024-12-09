@@ -1,0 +1,50 @@
+/* Navbar.css */
+header {
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+header .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+}
+
+header .search-bar {
+  display: none;
+}
+
+header .menu-icons a {
+  margin-right: 1rem;
+}
+
+header button {
+  background-color: #1d4ed8;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  border: none;
+  cursor: pointer;
+}
+
+header .hamburger {
+  display: none;
+}
+
+@media (max-width: 1024px) {
+  header .search-bar {
+    display: none;
+  }
+
+  header .hamburger {
+    display: inline-block;
+  }
+
+  header nav {
+    display: none;
+  }
+}
