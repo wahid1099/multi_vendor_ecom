@@ -3,10 +3,10 @@ import Main from "../layout/Main";
 import HomePage from "../pages/HomePage/HomePage";
 // import AboutUs from "../pages/AboutUsPage/AboutUs";
 // import ContactUs from "../pages/ContactUs/ContactUs";
-// import Register from "../pages/SignUp/SignUp";
-// import Login from "../pages/Login/Login";
+import RegistrationPage from "../pages/Register/RegistrationPage";
+import LoginPage from "../pages/LoginPage/LoginPage";
 // import ProtectedRoutes from "./ProtectedRoutes";
-// import DashboadLayout from "../layout/DashboardLayout";
+import DashboadLayout from "../layout/DashboadLayout";
 // import AddCarData from "../component/Dashboard/Admin/CarManagement/AddCarData";
 // import GetAllCarData from "../component/Dashboard/Admin/CarManagement/AllCars";
 // import UpdateCar from "../component/Dashboard/Admin/CarManagement/UpdateCarData";
@@ -55,64 +55,64 @@ export const router = createBrowserRouter([
       //     path: "/contact-us",
       //     element: <ContactUs />,
       //   },
-      //   {
-      //     path: "/signup",
-      //     element: <Register />,
-      //   },
-      //   {
-      //     path: "/login",
-      //     element: <Login />,
-      //   },
+      {
+        path: "/signup",
+        element: <RegistrationPage />,
+      },
+      {
+        path: "/login",
+        element: <LoginPage />,
+      },
     ],
   },
-  //   {
-  //     path: "/dashboard",
-  //     element: (
-  //       <ProtectedRoutes>
-  //         <DashboadLayout />
-  //       </ProtectedRoutes>
-  //     ),
-  //     children: [
-  //       {
-  //         path: "profile-view",
-  //         element: <UserViewProfile />,
-  //       },
-  //       {
-  //         path: "profile-update",
-  //         element: <UpdateProfile />,
-  //       },
-  //       {
-  //         path: "my-bookings",
-  //         element: <MyBookings />,
-  //       },
-  //       /* admin Profile Dropdown */
+  {
+    path: "/dashboard",
+    element: (
+      <DashboadLayout />
+      // <ProtectedRoutes>
 
-  //       {
-  //         path: "all-cars",
-  //         element: <GetAllCarData />,
-  //       },
-  //       {
-  //         path: "add-car",
-  //         element: <AddCarData />,
-  //       },
-  //       {
-  //         path: "update-car/:id",
-  //         element: <UpdateCar />,
-  //       },
-  //       {
-  //         path: "admin-profile-view",
-  //         element: <AdminViewProfile />,
-  //       },
-  //       {
-  //         path: "all-users",
-  //         element: <ManageUser />,
-  //       },
-  //       {
-  //         path: "admin-bookings",
-  //         element: <ManageBookings />,
-  //       },
-  //     ],
-  //   },
+      // </ProtectedRoutes>
+    ),
+    children: [
+      //       {
+      //         path: "profile-view",
+      //         element: <UserViewProfile />,
+      //       },
+      //       {
+      //         path: "profile-update",
+      //         element: <UpdateProfile />,
+      //       },
+      //       {
+      //         path: "my-bookings",
+      //         element: <MyBookings />,
+      //       },
+      //       /* admin Profile Dropdown */
+      //       {
+      //         path: "all-cars",
+      //         element: <GetAllCarData />,
+      //       },
+      //       {
+      //         path: "add-car",
+      //         element: <AddCarData />,
+      //       },
+      //       {
+      //         path: "update-car/:id",
+      //         element: <UpdateCar />,
+      //       },
+      //       {
+      //         path: "admin-profile-view",
+      //         element: <AdminViewProfile />,
+      //       },
+      //       {
+      //         path: "all-users",
+      //         element: <ManageUser />,
+      //       },
+      //       {
+      //         path: "admin-bookings",
+      //         element: <ManageBookings />,
+      //       },
+    ],
+  },
 
   //   {
   //     path: "*",

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { FiSearch, FiShoppingCart, FiHeart, FiMenu, FiX } from "react-icons/fi";
-
+import logo from "../../assets/logo.jpg";
 const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -11,8 +11,15 @@ const Navbar = () => {
     <header className="bg-white shadow-md sticky top-0 z-50">
       <div className="container mx-auto px-4 flex items-center justify-between py-3">
         {/* Logo */}
-        <div className="text-2xl font-bold text-gray-800">
-          <a href="/">Logo</a>
+        <div className="text-2xl font-bold text-gray-800 flex items-center space-x-3">
+          <a href="/" className="flex items-center space-x-3">
+            <img
+              src={logo}
+              className="h-14 md:h-15 lg:h-19 w-auto"
+              alt="Logo"
+            />
+            <span>BD SHOP</span>
+          </a>
         </div>
 
         {/* Search Bar */}
