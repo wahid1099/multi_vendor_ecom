@@ -1,12 +1,22 @@
 import { createBrowserRouter } from "react-router-dom";
 import Main from "../layout/Main";
 import HomePage from "../pages/HomePage/HomePage";
+import AboutUs from "../pages/HomePage/AboutUsPage";
+import ContactUs from "../pages/HomePage/ContactUsPage";
+import TermsConditions from "../pages/HomePage/TermsConditions";
+import PrivacyPolicy from "../pages/HomePage/PrivacyPolicy";
+
 // import AboutUs from "../pages/AboutUsPage/AboutUs";
 // import ContactUs from "../pages/ContactUs/ContactUs";
 import RegistrationPage from "../pages/Register/RegistrationPage";
 import LoginPage from "../pages/LoginPage/LoginPage";
-// import ProtectedRoutes from "./ProtectedRoutes";
+import ForgotPassword from "../pages/LoginPage/ForgotPassword";
+import ResetPassword from "../pages/LoginPage/ResetPasssword";
+import ProtectedRoutes from "./ProtectedRoutes.tsx";
 import DashboadLayout from "../layout/DashboadLayout";
+import AddProduct from "../components/Dashboard/Admin/products/AddProduct.tsx";
+import MyShop from "../components/Dashboard/vendor/Myshop.tsx";
+import ManageUsers from "../components/Dashboard/Admin/ManageUser/ManageUser.tsx";
 // import AddCarData from "../component/Dashboard/Admin/CarManagement/AddCarData";
 // import GetAllCarData from "../component/Dashboard/Admin/CarManagement/AllCars";
 // import UpdateCar from "../component/Dashboard/Admin/CarManagement/UpdateCarData";
@@ -31,6 +41,23 @@ export const router = createBrowserRouter([
         path: "/",
         element: <HomePage />,
       },
+      {
+        path: "/about-us",
+        element: <AboutUs />,
+      },
+      {
+        path: "/contact",
+        element: <ContactUs />,
+      },
+      {
+        path: "/privacy",
+        element: <PrivacyPolicy />,
+      },
+      {
+        path: "/terms",
+        element: <TermsConditions />,
+      },
+
       //   {
       //     path: "/about-us",
       //     element: <AboutUs />,
@@ -63,25 +90,56 @@ export const router = createBrowserRouter([
         path: "/login",
         element: <LoginPage />,
       },
+      {
+        path: "/forgot-pass",
+        element: <ForgotPassword />,
+      },
+      {
+        path: "/reset-pass",
+        element: <ResetPassword />,
+      },
     ],
   },
   {
     path: "/dashboard",
     element: (
-      <DashboadLayout />
-      // <ProtectedRoutes>
-
-      // </ProtectedRoutes>
+      <ProtectedRoutes allowedRoles={["Admin", "Vendor", "Customer"]}>
+        <DashboadLayout />
+      </ProtectedRoutes>
     ),
     children: [
-      //       {
-      //         path: "profile-view",
-      //         element: <UserViewProfile />,
-      //       },
-      //       {
-      //         path: "profile-update",
-      //         element: <UpdateProfile />,
-      //       },
+      {
+        path: "add-product",
+        element: (
+          <ProtectedRoutes allowedRoles={["Admin"]}>
+            <AddProduct />
+          </ProtectedRoutes>
+        ),
+      },
+      {
+        path: "manage-users",
+        element: (
+          <ProtectedRoutes allowedRoles={["Admin"]}>
+            <ManageUsers />
+          </ProtectedRoutes>
+        ),
+      },
+      {
+        path: "vendor/add-product",
+        element: (
+          <ProtectedRoutes allowedRoles={["Vendor"]}>
+            <AddProduct />
+          </ProtectedRoutes>
+        ),
+      },
+      {
+        path: "vendor-myshop",
+        element: (
+          <ProtectedRoutes allowedRoles={["Vendor"]}>
+            <MyShop />
+          </ProtectedRoutes>
+        ),
+      },
       //       {
       //         path: "my-bookings",
       //         element: <MyBookings />,

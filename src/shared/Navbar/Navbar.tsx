@@ -1,9 +1,30 @@
 import { useState } from "react";
 import { FiSearch, FiShoppingCart, FiHeart, FiMenu, FiX } from "react-icons/fi";
 import logo from "../../assets/logo.jpg";
+import { logOut } from "../../redux/features/Auth/AuthSlice";
+import { useAppDispatch, useAppSelector } from "../../redux/hook";
+import { Link, useNavigate } from "react-router-dom";
+import { userApi } from "../../redux/features/user/userApi";
+import { useCurrentToken } from "../../redux/features/Auth/AuthSlice";
+import { FaCaretDown } from "react-icons/fa"; // Import a dropdown icon from React Icons
+
 const Navbar = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const token = useAppSelector(useCurrentToken);
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
+  // Fetch user details
+  const { data: getMe } = userApi.useGetMeQuery(undefined, { skip: !token });
+  const user = getMe?.data;
+  console.log("user", user);
+
+  const handleLogOut = () => {
+    dispatch(logOut());
+    navigate("/");
+  };
 
   const toggleMenu = () => setMenuOpen(!menuOpen);
 
@@ -12,14 +33,14 @@ const Navbar = () => {
       <div className="container mx-auto px-4 flex items-center justify-between py-3">
         {/* Logo */}
         <div className="text-2xl font-bold text-gray-800 flex items-center space-x-3">
-          <a href="/" className="flex items-center space-x-3">
+          <Link to="/" className="flex items-center space-x-3">
             <img
               src={logo}
               className="h-14 md:h-15 lg:h-19 w-auto"
               alt="Logo"
             />
             <span>BD SHOP</span>
-          </a>
+          </Link>
         </div>
 
         {/* Search Bar */}
@@ -34,29 +55,63 @@ const Navbar = () => {
 
         {/* Menu Icons */}
         <div className="flex items-center space-x-6">
-          <a href="/cart" className="text-gray-700 text-lg">
+          <Link to="/cart" className="text-gray-700 text-lg">
             <FiShoppingCart />
-          </a>
-          <a href="/favorites" className="text-gray-700 text-lg">
+          </Link>
+          <Link to="/favorites" className="text-gray-700 text-lg">
             <FiHeart />
-          </a>
+          </Link>
 
-          {/* Login / Sign Up or Profile */}
-          {isLoggedIn ? (
-            <button
-              onClick={() => setIsLoggedIn(false)}
-              className="bg-gradient-to-r from-green-500 to-blue-500 text-white px-4 py-2 rounded-full text-sm shadow-md hover:shadow-lg hover:opacity-90 transition-all"
-            >
-              Logout
-            </button>
-          ) : (
-            <a
-              href="/login"
-              className="bg-gradient-to-r from-green-500 to-blue-500 text-white px-6 py-2 rounded-full text-sm shadow-md hover:shadow-lg hover:opacity-90 transition-all"
-            >
-              Login / Sign Up
-            </a>
-          )}
+          {/* User Profile or Login */}
+          <div className="relative">
+            {user ? (
+              <div className="relative">
+                <div className="flex items-center space-x-4">
+                  <img
+                    src={user.profileImage}
+                    alt="Profile"
+                    className="h-10 w-10 rounded-full border-2 border-gray-300 object-cover"
+                  />
+                  <span className="text-gray-700 font-semibold hidden lg:block">
+                    {user.name}
+                  </span>
+
+                  {/* Dropdown Trigger (using React Icon) */}
+                  <button
+                    onClick={toggleDropdown}
+                    className="text-gray-700 font-semibold focus:outline-none"
+                  >
+                    <FaCaretDown className="h-5 w-5" />
+                  </button>
+                </div>
+
+                {/* Dropdown Menu */}
+                {isDropdownOpen && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-lg border border-gray-300 z-50">
+                    <Link
+                      to="/dashboard"
+                      className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+                    >
+                      Dashboard
+                    </Link>
+                    <button
+                      onClick={handleLogOut}
+                      className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
+                    >
+                      Logout
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <Link
+                to="/login"
+                className="bg-gradient-to-r from-green-500 to-blue-500 text-white px-6 py-2 rounded-full text-sm shadow-md hover:shadow-lg hover:opacity-90 transition-all"
+              >
+                Login / Sign Up
+              </Link>
+            )}
+          </div>
 
           {/* Hamburger Menu */}
           <button
@@ -73,21 +128,39 @@ const Navbar = () => {
         <nav className="lg:hidden bg-gray-100">
           <ul className="space-y-2 px-4 py-2">
             <li>
-              <a href="/" className="block text-gray-700">
+              <Link to="/" className="block text-gray-700">
                 Home
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="/about" className="block text-gray-700">
+              <Link to="/about" className="block text-gray-700">
                 About Us
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="/contact" className="block text-gray-700">
+              <Link to="/contact" className="block text-gray-700">
                 Contact Us
-              </a>
+              </Link>
             </li>
           </ul>
+
+          {/* Mobile User Info */}
+          {user && (
+            <div className="flex items-center space-x-4 px-4 py-2 border-t border-gray-300">
+              <img
+                src={user.profileImage}
+                alt="Profile"
+                className="h-10 w-10 rounded-full border-2 border-gray-300 object-cover"
+              />
+              <span className="text-gray-700 font-semibold">{user.name}</span>
+              <button
+                onClick={handleLogOut}
+                className="bg-gradient-to-r from-green-500 to-blue-500 text-white px-4 py-2 rounded-full text-sm shadow-md hover:shadow-lg hover:opacity-90 transition-all"
+              >
+                Logout
+              </button>
+            </div>
+          )}
 
           {/* Mobile Search Bar */}
           <div className="flex items-center bg-white px-3 py-2 mt-2 rounded-md">

@@ -28,7 +28,7 @@ const Footer = () => {
             </h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <a href="/about" className="hover:text-white transition">
+                <a href="/about-us" className="hover:text-white transition">
                   About Us
                 </a>
               </li>
