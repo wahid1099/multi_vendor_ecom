@@ -49,3 +49,4 @@ export default tseslint.config({
 })
 ```
 # multi_vendor_ecom
+# mutli_vendor_ecomer_frontend
