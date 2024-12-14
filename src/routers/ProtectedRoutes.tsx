@@ -3,6 +3,7 @@ import { useAppSelector } from "../redux/hook";
 import { useCurrentToken } from "../redux/features/Auth/AuthSlice";
 import { Navigate } from "react-router-dom";
 import { userApi } from "../redux/features/user/userApi";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const ProtectedRoutes = ({
   children,
@@ -12,16 +13,33 @@ const ProtectedRoutes = ({
   allowedRoles: string[];
 }) => {
   const token = useAppSelector(useCurrentToken);
-  const { data: getMe } = userApi.useGetMeQuery(undefined, { skip: !token });
+  const { data: getMe, isLoading } = userApi.useGetMeQuery(undefined, {
+    skip: !token,
+  });
   const user = getMe?.data;
   const userRole = user?.role;
-  console.log("Private", userRole);
 
   if (!token) {
     return <Navigate to="/login" replace={true} />;
   }
 
-  if (allowedRoles && !allowedRoles.includes(userRole)) {
+  if (isLoading) {
+    // Show a loader while fetching user data
+    return (
+      <div className="flex items-center">
+        <ClipLoader
+          color="#fff"
+          loading={isLoading}
+          size={20} // Adjust size for better alignment
+          aria-label="Loading Spinner"
+          data-testid="loader"
+        />
+        <span className="ml-2">Logging in...</span>
+      </div>
+    );
+  }
+
+  if (!user || (allowedRoles && !allowedRoles.includes(userRole))) {
     // Redirect if the user doesn't have permission to access this route
     return <Navigate to="/" replace={true} />;
   }

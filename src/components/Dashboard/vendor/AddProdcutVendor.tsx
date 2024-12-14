@@ -5,11 +5,19 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { TProduct } from "@/type/global.type";
 import { ProductApi } from "../../../redux/features/products/ProductAPi";
 import slugify from "slugify";
-
-const AddProduct = () => {
+import { useCurrentToken } from "../../../redux/features/Auth/AuthSlice";
+import { useAppSelector } from "../../../redux/hook";
+import { userApi } from "../../../redux/features/user/userApi";
+const AddProductVendor = () => {
   const [createProduct] = ProductApi.useCreateProductMutation();
   const [images, setImages] = useState<string[]>([]);
   const [isUploading, setIsUploading] = useState(false);
+  const token = useAppSelector(useCurrentToken);
+
+  // Fetch user details
+  const { data: getMe } = userApi.useGetMeQuery(undefined, { skip: !token });
+  const user = getMe?.data;
+  console.log("add product", user);
 
   const {
     register,
@@ -84,8 +92,10 @@ const AddProduct = () => {
       inventory: Number(data.inventory),
       discount: Number(data.discount),
       stock: Number(data.inventory),
+      shopId: user.shops[0],
       variants: [],
     };
+    console.log(productData);
 
     try {
       await createProduct(productData).unwrap();
@@ -310,4 +320,4 @@ const AddProduct = () => {
   );
 };
 
-export default AddProduct;
+export default AddProductVendor;

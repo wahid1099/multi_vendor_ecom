@@ -12,30 +12,26 @@ export const ProductApi = baseApi.injectEndpoints({
       },
       invalidatesTags: ["product"],
     }),
-    getAllCars: builder.query({
-      query: ({ name, carType, price, location }) => {
-        const params = new URLSearchParams();
-        if (name) {
-          params.append("name", name);
-        }
-        if (carType) {
-          params.append("carType", carType);
-        }
-        if (price > 0) {
-          params.append("price", price);
-        }
-        if (location) {
-          params.append("location", location);
-        }
-
+    getAllProdcuts: builder.query({
+      query: () => {
         return {
-          url: "/cars",
+          url: "/",
           method: "GET",
-          params,
         };
       },
       providesTags: ["product"],
     }),
+
+    getAllVendorProducts: builder.query({
+      query: () => {
+        return {
+          url: "product/vendor-products",
+          method: "GET",
+        };
+      },
+      providesTags: ["product"],
+    }),
+
     getSingleCars: builder.query({
       query: (id: string) => ({
         url: `/cars/${id}`,
@@ -65,20 +61,19 @@ export const ProductApi = baseApi.injectEndpoints({
       },
       providesTags: ["product"],
     }),
-    updateCar: builder.mutation({
-      query: ({ id, carData }) => {
-        console.log(id, carData);
+    updateProduct: builder.mutation({
+      query: ({ id, ProductData }) => {
         return {
-          url: `/cars/${id}`,
-          method: "PUT",
-          body: carData,
+          url: `/product/${id}`,
+          method: "PATCH",
+          body: ProductData,
         };
       },
       invalidatesTags: ["product"],
     }),
-    deleteCar: builder.mutation({
+    deleteProduct: builder.mutation({
       query: (id: string) => ({
-        url: `/cars/${id}`,
+        url: `/product/${id}`,
         method: "DELETE",
       }),
       invalidatesTags: ["product"],

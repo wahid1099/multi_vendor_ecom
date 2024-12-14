@@ -72,7 +72,7 @@ export const roleLinks: RoleLinks = {
     },
     {
       name: "Manage Products",
-      link: "/dashboard/manage-products",
+      link: "/dashboard/vendor-manage-products",
       icon: createIcon(FiPackage),
     },
     {

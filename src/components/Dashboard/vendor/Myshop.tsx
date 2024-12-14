@@ -4,7 +4,7 @@ import { useCurrentToken } from "../../../redux/features/Auth/AuthSlice";
 import { useAppSelector } from "../../../redux/hook";
 import { userApi } from "../../../redux/features/user/userApi";
 import uploadImageToCloudinary from "../../../utils/uploadImage";
-import { TShop } from "@/type/global.type";
+// import { TShop } from "@/type/global.type";
 
 const MyShop: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -41,6 +41,7 @@ const MyShop: React.FC = () => {
       await createShop({
         ...shopData,
         logo: logoUrl,
+        vendorId: user._id,
       }).unwrap();
 
       setShopData({ name: "", description: "", logo: "" });
@@ -62,18 +63,33 @@ const MyShop: React.FC = () => {
   if (user?.shops && user.shops.length > 0) {
     const shop = user.shops[0];
     return (
-      <div>
-        <h1>My Shop</h1>
-        <div>
-          <h2>{shop.name}</h2>
-          <p>{shop.description}</p>
-          {shop.logo && (
-            <img
-              src={shop.logo}
-              alt="Shop Logo"
-              style={{ maxWidth: "200px" }}
-            />
-          )}
+      <div className="p-6 bg-gray-100 min-h-screen">
+        <div className="max-w-4xl mx-auto bg-white shadow-md rounded-lg p-6">
+          <h1 className="text-3xl font-bold text-gray-800 mb-4 border-b pb-2">
+            My Shop
+          </h1>
+          <div className="flex flex-col md:flex-row items-center gap-6">
+            {shop.logo && (
+              <img
+                src={shop.logo}
+                alt="Shop Logo"
+                className="w-48 h-48 object-cover rounded-lg shadow-md"
+              />
+            )}
+            <div className="flex flex-col">
+              <h2 className="text-2xl font-semibold text-gray-700">
+                {shop.name}
+              </h2>
+              <p className="text-gray-600 mt-2">{shop.description}</p>
+              <p className="text-gray-600 mt-2">
+                {shop.isBlacklisted ? "Blacklisted" : "Not Blacklisted"}
+              </p>
+              <p className="text-gray-600 mt-2">Orders: {shop.orders.length}</p>
+              <p className="text-gray-600 mt-2">
+                Followers: {shop.followers.length}
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     );

@@ -44,9 +44,11 @@ interface ProductVariant {
 
 // The main product interface, which includes variants and other details
 export type TProduct = {
+  _id: string; // Unique identifier for the product
   name: string; // Name of the product
   description: string; // Product description
   price: number; // Base price of the product
+  slug: string; // SEO-friendly slug
   discount?: number; // Optional discount in percentage (e.g., 10 for 10% off)
   stock: number; // Total stock available for the product
   images: string[]; // Array of image URLs for the product
@@ -54,7 +56,10 @@ export type TProduct = {
   shopId: string; // Refers to the Shop ID (typically an ObjectId, but kept as string here)
   variants: ProductVariant[]; // Array of variants for the product
   inventory: number;
-  slug: string;
+  visibility: "active" | "inactive" | "archived"; // Product status
+
+  createdAt: Date;
+  updatedAt: Date;
 };
 
 type OrderStatus =
