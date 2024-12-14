@@ -12,10 +12,10 @@ export const ProductApi = baseApi.injectEndpoints({
       },
       invalidatesTags: ["product"],
     }),
-    getAllProdcuts: builder.query({
+    getAllAdminProdcuts: builder.query({
       query: () => {
         return {
-          url: "/",
+          url: "product/all-products-admin",
           method: "GET",
         };
       },

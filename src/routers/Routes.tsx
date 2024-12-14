@@ -15,6 +15,7 @@ import ResetPassword from "../pages/LoginPage/ResetPasssword";
 import ProtectedRoutes from "./ProtectedRoutes.tsx";
 import DashboadLayout from "../layout/DashboadLayout";
 import AddProduct from "../components/Dashboard/Admin/products/AddProduct.tsx";
+import ManageProductsAdmin from "../components/Dashboard/Admin/products/ManageProducts.tsx";
 
 import MyShop from "../components/Dashboard/vendor/Myshop.tsx";
 import AddProductVendor from "../components/Dashboard/vendor/AddProdcutVendor";
@@ -127,6 +128,15 @@ export const router = createBrowserRouter([
           </ProtectedRoutes>
         ),
       },
+      {
+        path: "admin-manage-products",
+        element: (
+          <ProtectedRoutes allowedRoles={["Admin"]}>
+            <ManageProductsAdmin />
+          </ProtectedRoutes>
+        ),
+      },
+
       {
         path: "vendor/add-product",
         element: (

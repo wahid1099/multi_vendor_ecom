@@ -13,6 +13,8 @@ import { MdManageHistory } from "react-icons/md";
 import { FaMoneyBillTransfer } from "react-icons/fa6";
 import { MdOutlineRateReview } from "react-icons/md";
 import { CiShop } from "react-icons/ci";
+import { IoHome } from "react-icons/io5";
+import { RxDashboard } from "react-icons/rx";
 
 interface LinkItem {
   name: string;
@@ -31,7 +33,7 @@ export const roleLinks: RoleLinks = {
     {
       name: "Admin Dashboard",
       link: "/dashboard/admin-dashboard",
-      icon: createIcon(FiHome),
+      icon: createIcon(RxDashboard),
     },
     {
       name: "Manage Users",
@@ -45,7 +47,7 @@ export const roleLinks: RoleLinks = {
     },
     {
       name: "Manage Products",
-      link: "/dashboard/manage-products",
+      link: "/dashboard/admin-manage-products",
       icon: createIcon(MdManageHistory),
     },
     {
@@ -62,6 +64,11 @@ export const roleLinks: RoleLinks = {
       name: "Settings",
       link: "/dashboard/settings",
       icon: createIcon(FiSettings),
+    },
+    {
+      name: "Home",
+      link: "/",
+      icon: createIcon(IoHome),
     },
   ],
   Vendor: [
