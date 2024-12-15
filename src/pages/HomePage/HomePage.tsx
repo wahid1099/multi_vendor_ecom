@@ -1,4 +1,5 @@
-import ImageCarousel from "@/components/Home/Slider";
+import ImageCarousel from "../../components/Home/Slider";
+import BrowseProducts from "../../components/Home/BrowseProducts";
 
 const HomePage = () => {
   return (
@@ -6,6 +7,7 @@ const HomePage = () => {
       <ImageCarousel></ImageCarousel>
       <div className="container mx-auto">
         <h2>Homepage</h2>
+        <BrowseProducts></BrowseProducts>
       </div>
     </div>
   );

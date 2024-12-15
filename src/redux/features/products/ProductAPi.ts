@@ -1,4 +1,21 @@
 import { baseApi } from "../../api/baseApi";
+import { TProduct } from "@/type/global.type";
+
+interface BrowseProductsQuery {
+  page?: number;
+  limit?: number;
+  search?: string;
+}
+
+interface ProductResponse {
+  success: boolean;
+  data: TProduct[];
+  meta: {
+    page: number;
+    limit: number;
+    total: number;
+  };
+}
 
 export const ProductApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -32,13 +49,29 @@ export const ProductApi = baseApi.injectEndpoints({
       providesTags: ["product"],
     }),
 
-    getSingleCars: builder.query({
+    getAllBrowseProducts: builder.query<ProductResponse, BrowseProductsQuery>({
+      query: ({ page = 1, limit = 10, search = "" } = {}) => {
+        const params = new URLSearchParams({
+          page: String(page),
+          limit: String(limit),
+          search,
+        });
+        return {
+          url: `product/browseproducts?${params.toString()}`,
+          method: "GET",
+        };
+      },
+      providesTags: ["product"],
+    }),
+
+    getSingleProduct: builder.query({
       query: (id: string) => ({
-        url: `/cars/${id}`,
+        url: `/product/${id}`,
         method: "GET",
       }),
       providesTags: ["product"],
     }),
+
     searchCarsForBooking: builder.query({
       query: (args) => {
         const params = new URLSearchParams();

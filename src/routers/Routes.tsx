@@ -1,6 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import Main from "../layout/Main";
-import HomePage from "../pages/HomePage/HomePage";
+import HomePage from "../pages/HomePage/HomePage.tsx";
 import AboutUs from "../pages/HomePage/AboutUsPage";
 import ContactUs from "../pages/HomePage/ContactUsPage";
 import TermsConditions from "../pages/HomePage/TermsConditions";
@@ -21,6 +21,7 @@ import MyShop from "../components/Dashboard/vendor/Myshop.tsx";
 import AddProductVendor from "../components/Dashboard/vendor/AddProdcutVendor";
 import ManageUsers from "../components/Dashboard/Admin/ManageUser/ManageUser.tsx";
 import ManageProducts from "../components/Dashboard/vendor/ManageProducts.tsx";
+import ProductDetails from "../pages/Products/ProductsDetails.tsx";
 // import AddCarData from "../component/Dashboard/Admin/CarManagement/AddCarData";
 // import GetAllCarData from "../component/Dashboard/Admin/CarManagement/AllCars";
 // import UpdateCar from "../component/Dashboard/Admin/CarManagement/UpdateCarData";
@@ -98,6 +99,11 @@ export const router = createBrowserRouter([
         path: "/forgot-pass",
         element: <ForgotPassword />,
       },
+      {
+        path: "/product/:id",
+        element: <ProductDetails />,
+      },
+
       {
         path: "/reset-pass",
         element: <ResetPassword />,
