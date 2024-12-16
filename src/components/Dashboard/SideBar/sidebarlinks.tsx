@@ -97,6 +97,11 @@ export const roleLinks: RoleLinks = {
       link: "/dashboard/vendor-myshop",
       icon: createIcon(CiShop),
     },
+    {
+      name: "Home",
+      link: "/",
+      icon: createIcon(IoHome),
+    },
   ],
   Customer: [
     {

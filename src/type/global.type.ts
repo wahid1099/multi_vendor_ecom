@@ -31,6 +31,9 @@ export type TShop = {
   IShop: string; // Refers to the vendor (User ID)
   createdAt: Date;
   updatedAt: Date;
+  products?: TProduct[];
+  orders?: TOrder[];
+  followers?: TUser[];
 };
 
 // Defines the structure of a product variant (e.g., size, color, material)
@@ -53,7 +56,7 @@ export type TProduct = {
   stock: number; // Total stock available for the product
   images: string[]; // Array of image URLs for the product
   category: string; // Category of the product (e.g., 'Electronics', 'Fashion')
-  shopId: string; // Refers to the Shop ID (typically an ObjectId, but kept as string here)
+  shop: TShop;
   variants: ProductVariant[]; // Array of variants for the product
   inventory: number;
   visibility: "active" | "inactive" | "archived"; // Product status
@@ -72,7 +75,7 @@ type OrderStatus =
 export type TOrder = {
   id: string;
   userId: string; // Refers to the User ID (Customer)
-  shopId: string; // Refers to the Shop ID
+  shop: TShop; // Refers to the Shop ID
   products: Array<{
     productId: string;
     quantity: number;
