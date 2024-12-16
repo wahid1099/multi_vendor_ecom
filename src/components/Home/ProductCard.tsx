@@ -17,7 +17,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
       {/* Image Container with Zoom Effect */}
       <div className="relative group">
         <img
-          className="w-full h-40 object-cover rounded-t-lg transition-transform duration-300 group-hover:scale-105"
+          className="w-full h-80 object-cover rounded-t-lg transition-transform duration-300 group-hover:scale-105"
           src={product.images[0]}
           alt={product.name}
         />
