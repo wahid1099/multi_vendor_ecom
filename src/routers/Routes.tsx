@@ -5,7 +5,7 @@ import AboutUs from "../pages/HomePage/AboutUsPage";
 import ContactUs from "../pages/HomePage/ContactUsPage";
 import TermsConditions from "../pages/HomePage/TermsConditions";
 import PrivacyPolicy from "../pages/HomePage/PrivacyPolicy";
-
+import CartPage from "../pages/Products/CartPage.tsx";
 // import AboutUs from "../pages/AboutUsPage/AboutUs";
 // import ContactUs from "../pages/ContactUs/ContactUs";
 import RegistrationPage from "../pages/Register/RegistrationPage";
@@ -91,6 +91,12 @@ export const router = createBrowserRouter([
         path: "/signup",
         element: <RegistrationPage />,
       },
+
+      {
+        path: "/cart",
+        element: <CartPage />,
+      },
+
       {
         path: "/login",
         element: <LoginPage />,

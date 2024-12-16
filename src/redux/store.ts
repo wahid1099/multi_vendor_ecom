@@ -12,6 +12,7 @@ import {
   PURGE,
   REGISTER,
 } from "redux-persist";
+import cartReducer from "./features/Cart/cartSlice.ts"; // Import the cart reducer
 
 // Persist configuration for the auth reducer
 const persistConfig = {
@@ -27,6 +28,7 @@ export const store = configureStore({
   reducer: {
     [baseApi.reducerPath]: baseApi.reducer,
     auth: persistedAuthReducer,
+    cart: cartReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

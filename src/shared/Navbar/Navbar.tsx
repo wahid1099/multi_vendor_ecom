@@ -16,10 +16,17 @@ const Navbar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
+
   // Fetch user details
   const { data: getMe } = userApi.useGetMeQuery(undefined, { skip: !token });
   const user = getMe?.data;
-  console.log("user", user);
+
+  // Fetch cart items from the Redux store
+  const cartItems = useAppSelector((state) => state.cart.items); // Adjust path based on your store structure
+  const cartItemCount = cartItems.reduce(
+    (count, item) => count + item.quantity,
+    0
+  );
 
   const handleLogOut = () => {
     dispatch(logOut());
@@ -55,9 +62,18 @@ const Navbar = () => {
 
         {/* Menu Icons */}
         <div className="flex items-center space-x-6">
-          <Link to="/cart" className="text-gray-700 text-lg">
-            <FiShoppingCart />
-          </Link>
+          {/* Cart Icon with Count */}
+          <div className="relative">
+            <Link to="/cart" className="text-gray-700 text-lg relative">
+              <FiShoppingCart />
+              {cartItemCount > 0 && (
+                <span className="absolute -top-2 -right-3 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
+                  {cartItemCount}
+                </span>
+              )}
+            </Link>
+          </div>
+
           <Link to="/favorites" className="text-gray-700 text-lg">
             <FiHeart />
           </Link>
