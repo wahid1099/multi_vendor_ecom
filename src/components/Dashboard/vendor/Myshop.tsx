@@ -60,8 +60,8 @@ const MyShop: React.FC = () => {
     setIsModalOpen(false);
   };
 
-  if (user?.shops && user.shops.length > 0) {
-    const shop = user.shops[0];
+  if (user?.shop && user.shop.length > 0) {
+    const shop = user.shop[0];
     return (
       <div className="p-6 bg-gray-100 min-h-screen">
         <div className="max-w-4xl mx-auto bg-white shadow-md rounded-lg p-6">
@@ -102,7 +102,7 @@ const MyShop: React.FC = () => {
       </h1>
       <button
         onClick={openModal}
-        disabled={user?.shops && user.shops.length > 0}
+        disabled={user?.shop && user.shop.length > 0}
         className="px-6 py-3 bg-blue-500 text-white font-medium text-lg rounded-lg shadow-md hover:bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed"
       >
         Create Shop

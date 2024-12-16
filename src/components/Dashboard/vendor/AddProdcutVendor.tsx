@@ -92,7 +92,7 @@ const AddProductVendor = () => {
       inventory: Number(data.inventory),
       discount: Number(data.discount),
       stock: Number(data.inventory),
-      shop: user.shops[0],
+      shop: user.shop[0],
       variants: [],
     };
     console.log(productData);
