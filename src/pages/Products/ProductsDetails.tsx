@@ -1,4 +1,3 @@
-import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { ProductApi } from "../../redux/features/products/ProductAPi"; // Adjust the path based on your project structure.
 
@@ -46,7 +45,7 @@ const ProductDetails = () => {
             className="w-full h-96 object-cover rounded-lg shadow-lg"
           />
           <div className="flex gap-2 mt-4">
-            {images.slice(1).map((img, index) => (
+            {images.slice(1).map((img: string, index: number) => (
               <img
                 key={index}
                 src={img}
