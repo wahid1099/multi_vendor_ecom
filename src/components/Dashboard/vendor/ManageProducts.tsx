@@ -154,33 +154,6 @@ const ManageProducts = () => {
     setIsModalOpen(false);
     setSelectedProduct(null);
   };
-  //     console.log("Delete product ID:", id);
-  //     Swal.fire({
-  //       title: "Are you sure?",
-  //       text: "This action cannot be undone!",
-  //       icon: "warning",
-  //       showCancelButton: true,
-  //       confirmButtonColor: "#d33",
-  //       cancelButtonColor: "#3085d6",
-  //       confirmButtonText: "Yes, delete it!",
-  //     }).then((result) => {
-  //       if (result.isConfirmed) {
-  //         // Call the deleteProduct mutation if confirmed
-  //         deleteProduct(id)
-  //           .unwrap()
-  //           .then(() => {
-  //             Swal.fire("Deleted!", "Your product has been deleted.", "success");
-  //           })
-  //           .catch((error) => {
-  //             Swal.fire(
-  //               "Error!",
-  //               "There was a problem deleting the product.",
-  //               error.message
-  //             );
-  //           });
-  //       }
-  //     });
-  //   };
 
   const table = useReactTable({
     data: data?.data || [],
