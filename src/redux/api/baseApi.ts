@@ -18,10 +18,18 @@ const baseQuery = fetchBaseQuery({
   baseUrl: API_BASE_URL,
   credentials: "include",
   prepareHeaders: (headers, { getState }) => {
-    const token = (getState() as RootState)?.auth?.token;
+    const rawToken = (getState() as RootState)?.auth?.token;
+
+    // Parse token if it's stringified
+    const token =
+      typeof rawToken === "string" && rawToken.startsWith("{")
+        ? JSON.parse(rawToken)
+        : rawToken;
 
     if (token) {
       headers.set("Authorization", `Bearer ${token}`);
+    } else {
+      console.warn("No valid token found in state");
     }
     return headers;
   },
@@ -36,11 +44,18 @@ const baseQueryWithRefreshToken: BaseQueryFn<
   let result = await baseQuery(args, api, extraOptions);
 
   if (result?.error?.status === 401) {
+    console.warn("Access token expired, attempting to refresh...");
     try {
       const res = await fetch(REFRESH_TOKEN_URL, {
         method: "POST",
         credentials: "include",
       });
+
+      if (!res.ok) {
+        throw new Error(
+          `Refresh token request failed with status: ${res.status}`
+        );
+      }
 
       const refreshData = await res.json();
 
@@ -52,14 +67,17 @@ const baseQueryWithRefreshToken: BaseQueryFn<
           api.dispatch(
             setUser({
               user,
-              token: refreshData.data.accessToken,
+              token: refreshData.data.accessToken, // Store as a plain string
             })
           );
 
           // Retry original request with new token
           result = await baseQuery(args, api, extraOptions);
+        } else {
+          console.warn("User not found in state during token refresh");
         }
       } else {
+        console.error("No access token received during token refresh");
         api.dispatch(logOut());
       }
     } catch (error) {
@@ -75,6 +93,6 @@ const baseQueryWithRefreshToken: BaseQueryFn<
 export const baseApi = createApi({
   reducerPath: "baseApi",
   baseQuery: baseQueryWithRefreshToken,
-  tagTypes: ["user", "product", "reviews", "shop", "transection", "cart"],
+  tagTypes: ["user", "product", "reviews", "shop", "payment", "cart", "order"],
   endpoints: () => ({}),
 });

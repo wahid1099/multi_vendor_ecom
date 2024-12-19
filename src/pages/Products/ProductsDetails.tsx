@@ -4,16 +4,22 @@ import { toast } from "sonner";
 import { ProductApi } from "../../redux/features/products/ProductAPi";
 import { addToCart } from "../../redux/features/Cart/cartSlice";
 import { useState } from "react";
-import { useSelector } from "react-redux";
-import { RootState } from "../../redux/store";
 
+import { useCurrentToken } from "../../redux/features/Auth/AuthSlice";
+import { useAppSelector } from "../../redux/hook";
+import { userApi } from "../../redux/features/user/userApi";
 const ProductDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [selectedImage, setSelectedImage] = useState(0);
   const [isZoomed, setIsZoomed] = useState(false);
-  const { user } = useSelector((state: RootState) => state.auth);
+
+  const token = useAppSelector(useCurrentToken);
+
+  // Fetch user details
+  const { data: getMe } = userApi.useGetMeQuery(undefined, { skip: !token });
+  const user = getMe?.data;
 
   const {
     data: product,
@@ -36,6 +42,7 @@ const ProductDetails = () => {
       </div>
     );
   }
+  console.log(product.data);
 
   const {
     name,
@@ -44,7 +51,7 @@ const ProductDetails = () => {
     images,
     category,
     inventory,
-    vendorId,
+
     discount,
   } = product.data;
 
@@ -65,7 +72,12 @@ const ProductDetails = () => {
             name,
             price: finalPrice,
             quantity: 1,
-            vendorId,
+            shopId: product.data.shop._id,
+
+            image: images[0],
+            discount: discount || 0,
+            inventory,
+            userId: user._id, // Send user ID here
           })
         );
         toast.success(`${name} has been added to your cart!`);

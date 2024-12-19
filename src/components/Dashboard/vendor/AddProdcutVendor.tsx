@@ -17,7 +17,6 @@ const AddProductVendor = () => {
   // Fetch user details
   const { data: getMe } = userApi.useGetMeQuery(undefined, { skip: !token });
   const user = getMe?.data;
-  console.log("add product", user);
 
   const {
     register,

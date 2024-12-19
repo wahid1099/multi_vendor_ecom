@@ -119,5 +119,10 @@ export const roleLinks: RoleLinks = {
       link: "/dashboard/profile",
       icon: createIcon(FiUser),
     },
+    {
+      name: "Home",
+      link: "/",
+      icon: createIcon(IoHome),
+    },
   ],
 };
