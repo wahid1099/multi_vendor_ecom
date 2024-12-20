@@ -12,18 +12,18 @@ export const OrderApi = baseApi.injectEndpoints({
       },
       invalidatesTags: ["order"],
     }),
-    getAllorders: builder.query({
+    getUserorders: builder.query({
       query: () => {
         return {
-          url: "/user-order",
+          url: "/order/user-order",
           method: "GET",
         };
       },
       providesTags: ["order"],
     }),
-    getSingleorder: builder.query({
-      query: (id: string) => ({
-        url: `/order/${id}`,
+    getVendororders: builder.query({
+      query: () => ({
+        url: `/order/vendor-orders`,
         method: "GET",
       }),
       providesTags: ["order"],

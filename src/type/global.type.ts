@@ -65,36 +65,39 @@ export type TProduct = {
   updatedAt: Date;
 };
 
-type OrderStatus =
-  | "Pending"
-  | "Processing"
-  | "Shipped"
-  | "Delivered"
-  | "Cancelled";
+// type OrderStatus =
+//   | "Pending"
+//   | "Processing"
+//   | "Shipped"
+//   | "Delivered"
+//   | "Cancelled";
 
 export type TOrder = {
-  id: string;
-  userId: string; // Refers to the User ID (Customer)
-  shop: TShop; // Refers to the Shop ID
-  products: Array<{
-    productId: string;
-    quantity: number;
-    price: number; // Final price after discount
-  }>;
-  totalAmount: number;
-  status: OrderStatus;
-  createdAt: Date;
-  updatedAt: Date;
+  _id: string; // Order ID
+  user?: string; // User ID
+  shop?: TShop;
+  paymentType: "COD" | "ONLINE"; // Type of payment
+  totalAmount: number; // Total order amount
+  status: "pending" | "completed" | "canceled"; // Order status
+  items: {
+    product: TProduct;
+    quantity: number; // Quantity of the product
+    _id: string; // Unique ID for the item
+  }[];
+  createdAt: string; // Order creation timestamp
+  updatedAt: string; // Order last update timestamp
+  payment?: TPayment | null; // Payment details (optional, may be null for COD)
 };
 
-type PaymentStatus = "Pending" | "Completed" | "Failed";
+type PaymentStatus = "success" | "failed" | "pending";
 
 export type TPayment = {
-  id: string;
-  orderId: string; // Refers to the Order ID
-  userId: string; // Refers to the User ID (Customer)
+  _id: string;
+  order: string; // Refers to the Order ID
+  user: string; // Refers to the User ID (Customer)
   amount: number;
   status: PaymentStatus;
+  transactionId?: string;
   method: string; // e.g., "Credit Card", "PayPal", "COD"
   createdAt: Date;
   updatedAt: Date;

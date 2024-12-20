@@ -88,8 +88,8 @@ export const roleLinks: RoleLinks = {
       icon: createIcon(IoBagAdd),
     },
     {
-      name: "Orders",
-      link: "/dashboard/orders",
+      name: "Manage Orders",
+      link: "/dashboard/vendor-orders",
       icon: createIcon(FiShoppingBag),
     },
     {
@@ -110,8 +110,8 @@ export const roleLinks: RoleLinks = {
       icon: createIcon(FiHome),
     },
     {
-      name: "View Products",
-      link: "/dashboard/view-products",
+      name: "View Orders",
+      link: "/dashboard/my-orders",
       icon: createIcon(FiPackage),
     },
     {

@@ -21,7 +21,10 @@ import MyShop from "../components/Dashboard/vendor/Myshop.tsx";
 import AddProductVendor from "../components/Dashboard/vendor/AddProdcutVendor";
 import ManageUsers from "../components/Dashboard/Admin/ManageUser/ManageUser.tsx";
 import ManageProducts from "../components/Dashboard/vendor/ManageProducts.tsx";
+import VendorOrdersTable from "../components/Dashboard/vendor/VendorOrdersTable.tsx";
 import ProductDetails from "../pages/Products/ProductsDetails.tsx";
+
+import UserAllOrders from "../components/Dashboard/User/Allorders.tsx";
 // import AddCarData from "../component/Dashboard/Admin/CarManagement/AddCarData";
 // import GetAllCarData from "../component/Dashboard/Admin/CarManagement/AllCars";
 // import UpdateCar from "../component/Dashboard/Admin/CarManagement/UpdateCarData";
@@ -170,6 +173,23 @@ export const router = createBrowserRouter([
         element: (
           <ProtectedRoutes allowedRoles={["Vendor"]}>
             <ManageProducts />
+          </ProtectedRoutes>
+        ),
+      },
+      {
+        path: "vendor-orders",
+        element: (
+          <ProtectedRoutes allowedRoles={["Vendor"]}>
+            <VendorOrdersTable />
+          </ProtectedRoutes>
+        ),
+      },
+
+      {
+        path: "my-orders",
+        element: (
+          <ProtectedRoutes allowedRoles={["Customer"]}>
+            <UserAllOrders />
           </ProtectedRoutes>
         ),
       },

@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@headlessui/react": "^2.2.0",
     "@reduxjs/toolkit": "^2.4.0",
     "@tanstack/react-table": "^8.20.5",
     "antd": "^5.22.4",
@@ -42,7 +43,7 @@
   "devDependencies": {
     "@eslint/js": "^9.15.0",
     "@types/node": "^22.10.1",
-    "@types/react": "^18.3.12",
+    "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.1",
     "@types/react-modal": "^3.16.3",
     "@types/react-table": "^7.7.20",

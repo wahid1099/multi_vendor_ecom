@@ -28,7 +28,7 @@ const ProtectedRoutes = ({
     return (
       <div className="flex items-center">
         <ClipLoader
-          color="#fff"
+          color="#e93b16"
           loading={isLoading}
           size={20} // Adjust size for better alignment
           aria-label="Loading Spinner"
