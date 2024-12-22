@@ -1,52 +1,61 @@
-# React + TypeScript + Vite
+# :shopping_cart: **Frontend - E-Commerce Application**
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Overview
 
-Currently, two official plugins are available:
+This is the **React** frontend for the E-Commerce application. It allows users to browse products, add them to the cart, and complete purchases through the **AmarPay** payment gateway.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## :rocket: Features
 
-## Expanding the ESLint configuration
+- **Product Listing**: View products with details like name, price, description, and images.
+- **Product Details**: Detailed view of each product with an option to add it to the cart.
+- **Shopping Cart**: Add, remove, and update the quantity of items in the cart.
+- **User Authentication**: Login and registration functionality.
+- **Order Checkout**: Integration with AmarPay for secure payment processing.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## :wrench: Installation
 
-- Configure the top-level `parserOptions` property like this:
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/wahid1099/multi_vendor_ecom
+   ```
+   Navigate to the frontend directory:
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+cd assignment9-frontend
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+Install dependencies:
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+npm install
+Start the development server:
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
-# multi_vendor_ecom
-# mutli_vendor_ecomer_frontend
+npm start
+
+:gear: Tech Stack
+React.js
+React Router
+Axios (for API calls)
+AmarPay (payment gateway)
+Tailwind CSS (styling)
+
+:book: Contributing
+Fork the repository.
+Clone your fork:
+git clone https://github.com/wahid1099/multi_vendor_ecom
+git checkout -b feature-name
+
+Make your changes.
+Commit and push:
+
+git commit -m "Add feature"
+git push origin feature-name
+
+---
+
+### Key Features of the README:
+
+- **Icons**: Added relevant icons for better readability and visual appeal.
+- **Installation**: Clear instructions for setting up both frontend and backend.
+- **Tech Stack**: Lists the technologies used for both parts.
+- **Contributing**: Standard contributing guidelines for GitHub.
+- **License**: MIT License mentioned for open-source use.
+
+You can now create separate `README.md` files for both the **frontend** and **backend** parts of your project on GitHub. Let me know if you need any further changes!

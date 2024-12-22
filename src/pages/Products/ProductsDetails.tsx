@@ -4,16 +4,19 @@ import { toast } from "sonner";
 import { ProductApi } from "../../redux/features/products/ProductAPi";
 import { addToCart } from "../../redux/features/Cart/cartSlice";
 import { useState } from "react";
+import { FaShop, FaHeart } from "react-icons/fa6";
 
 import { useCurrentToken } from "../../redux/features/Auth/AuthSlice";
 import { useAppSelector } from "../../redux/hook";
 import { userApi } from "../../redux/features/user/userApi";
+
 const ProductDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [selectedImage, setSelectedImage] = useState(0);
   const [isZoomed, setIsZoomed] = useState(false);
+  const [quantity, setQuantity] = useState(1); // State for cart quantity
 
   const token = useAppSelector(useCurrentToken);
 
@@ -42,19 +45,9 @@ const ProductDetails = () => {
       </div>
     );
   }
-  console.log(product.data);
 
-  const {
-    name,
-    description,
-    price,
-    images,
-    category,
-    inventory,
-
-    discount,
-  } = product.data;
-
+  const { name, description, price, images, category, inventory, discount } =
+    product.data;
   const finalPrice = discount > 0 ? price - (price * discount) / 100 : price;
 
   const handleAddToCart = () => {
@@ -71,13 +64,12 @@ const ProductDetails = () => {
             id,
             name,
             price: finalPrice,
-            quantity: 1,
+            quantity,
             shopId: product.data.shop._id,
-
             image: images[0],
             discount: discount || 0,
             inventory,
-            userId: user._id, // Send user ID here
+            userId: user._id,
           })
         );
         toast.success(`${name} has been added to your cart!`);
@@ -94,6 +86,14 @@ const ProductDetails = () => {
 
   const handleImageZoom = () => {
     setIsZoomed(!isZoomed);
+  };
+
+  const increaseQuantity = () => {
+    if (quantity < inventory) setQuantity(quantity + 1);
+  };
+
+  const decreaseQuantity = () => {
+    if (quantity > 1) setQuantity(quantity - 1);
   };
 
   return (
@@ -150,11 +150,23 @@ const ProductDetails = () => {
         {/* Details Section */}
         <div className="flex-1 flex flex-col">
           <div className="bg-white p-6 rounded-xl shadow-lg">
-            <h1 className="text-4xl font-bold text-gray-800 mb-4">{name}</h1>
-            <div className="flex items-center gap-2 mb-4">
+            <div className="flex justify-between items-center mb-4">
+              <div className="flex items-center gap-2">
+                <h1 className="text-xl font-bold text-gray-800">
+                  <FaShop /> {product.data.shop.name}
+                </h1>
+                <button className="text-blue-500 flex items-center gap-1 hover:underline">
+                  Follow
+                </button>
+              </div>
               <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">
                 {category}
               </span>
+            </div>
+
+            <h1 className="text-4xl font-bold text-gray-800 mb-4">{name}</h1>
+
+            <div className="flex items-center gap-2 mb-4">
               <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">
                 {inventory > 0 ? "In Stock" : "Out of Stock"}
               </span>
@@ -185,11 +197,30 @@ const ProductDetails = () => {
               <p className="text-gray-700">{description}</p>
             </div>
 
-            <div className="space-y-4">
+            <div className="space-y-4 mb-6">
               <p className="text-gray-600">
                 Available Stock:{" "}
                 <span className="font-semibold">{inventory} units</span>
               </p>
+
+              {/* Quantity Control */}
+              <div className="flex items-center gap-4 mb-4">
+                <button
+                  onClick={decreaseQuantity}
+                  className="px-4 py-2 bg-gray-200 text-gray-600 rounded-md"
+                  disabled={quantity <= 1}
+                >
+                  -
+                </button>
+                <span className="text-lg font-semibold">{quantity}</span>
+                <button
+                  onClick={increaseQuantity}
+                  className="px-4 py-2 bg-gray-200 text-gray-600 rounded-md"
+                  disabled={quantity >= inventory}
+                >
+                  +
+                </button>
+              </div>
 
               <button
                 onClick={handleAddToCart}
@@ -205,6 +236,33 @@ const ProductDetails = () => {
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Review Section */}
+      <div className="bg-white p-6 mt-10 rounded-xl shadow-lg">
+        <h3 className="text-2xl font-semibold mb-4">Customer Reviews</h3>
+        <div className="flex gap-4 mb-4">
+          <div className="flex gap-2 items-center">
+            <img
+              src="https://via.placeholder.com/40"
+              alt="User"
+              className="w-10 h-10 rounded-full"
+            />
+            <div>
+              <h4 className="font-semibold text-gray-800">John Doe</h4>
+              <div className="flex items-center gap-1 text-yellow-500">
+                <FaHeart />
+                <FaHeart />
+                <FaHeart />
+                <FaHeart />
+                <FaHeart />
+              </div>
+            </div>
+          </div>
+        </div>
+        <p className="text-gray-700">
+          This product is amazing! Highly recommend.
+        </p>
       </div>
     </div>
   );
