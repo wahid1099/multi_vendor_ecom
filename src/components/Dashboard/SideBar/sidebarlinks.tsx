@@ -15,6 +15,7 @@ import { MdOutlineRateReview } from "react-icons/md";
 import { CiShop } from "react-icons/ci";
 import { IoHome } from "react-icons/io5";
 import { RxDashboard } from "react-icons/rx";
+import { BsShop } from "react-icons/bs";
 
 interface LinkItem {
   name: string;
@@ -51,8 +52,14 @@ export const roleLinks: RoleLinks = {
       icon: createIcon(MdManageHistory),
     },
     {
+      name: "Manage Orders ",
+      link: "/dashboard/admin-manage-order",
+      icon: createIcon(BsShop),
+    },
+
+    {
       name: "Manage Transaction ",
-      link: "/dashboard/manage-payments",
+      link: "/dashboard/admin-manage-payments",
       icon: createIcon(FaMoneyBillTransfer),
     },
     {

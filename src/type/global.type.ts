@@ -74,7 +74,7 @@ export type TProduct = {
 
 export type TOrder = {
   _id: string; // Order ID
-  user?: string; // User ID
+  user?: TUser; // User ID
   shop?: TShop;
   paymentType: "COD" | "ONLINE"; // Type of payment
   totalAmount: number; // Total order amount
@@ -94,7 +94,7 @@ type PaymentStatus = "success" | "failed" | "pending";
 export type TPayment = {
   _id: string;
   order: string; // Refers to the Order ID
-  user: string; // Refers to the User ID (Customer)
+  user: TUser; // Refers to the User ID (Customer)
   amount: number;
   status: PaymentStatus;
   transactionId?: string;

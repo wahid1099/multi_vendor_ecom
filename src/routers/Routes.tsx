@@ -13,32 +13,22 @@ import LoginPage from "../pages/LoginPage/LoginPage";
 import ForgotPassword from "../pages/LoginPage/ForgotPassword";
 import ResetPassword from "../pages/LoginPage/ResetPasssword";
 import ProtectedRoutes from "./ProtectedRoutes.tsx";
+import ProductDetails from "../pages/Products/ProductsDetails.tsx";
 import DashboadLayout from "../layout/DashboadLayout";
+//admin routes
 import AddProduct from "../components/Dashboard/Admin/products/AddProduct.tsx";
 import ManageProductsAdmin from "../components/Dashboard/Admin/products/ManageProducts.tsx";
+import AllOrdersAdmin from "../components/Dashboard/Admin/Allorders/AllOrdersAdmin.tsx";
+import ManageUsers from "../components/Dashboard/Admin/ManageUser/ManageUser.tsx";
+import AllTransactionsAdmin from "../components/Dashboard/Admin/AllTransections/AllTransections.tsx";
 
+//vendor routes
 import MyShop from "../components/Dashboard/vendor/Myshop.tsx";
 import AddProductVendor from "../components/Dashboard/vendor/AddProdcutVendor";
-import ManageUsers from "../components/Dashboard/Admin/ManageUser/ManageUser.tsx";
 import ManageProducts from "../components/Dashboard/vendor/ManageProducts.tsx";
 import VendorOrdersTable from "../components/Dashboard/vendor/VendorOrdersTable.tsx";
-import ProductDetails from "../pages/Products/ProductsDetails.tsx";
-
+//customer routes
 import UserAllOrders from "../components/Dashboard/User/Allorders.tsx";
-// import AddCarData from "../component/Dashboard/Admin/CarManagement/AddCarData";
-// import GetAllCarData from "../component/Dashboard/Admin/CarManagement/AllCars";
-// import UpdateCar from "../component/Dashboard/Admin/CarManagement/UpdateCarData";
-// import AdminViewProfile from "../component/Dashboard/Admin/AdminProfile/AdminProfile";
-// import ManageUser from "../component/Dashboard/Admin/UserManagement/ManageUser";
-// import ManageBookings from "../component/Dashboard/Admin/ManageBookings/ManageBookings";
-// import UserViewProfile from "../component/Dashboard/User/UserProfile";
-// import UpdateProfile from "../component/Dashboard/User/UpdateProfile";
-// import MyBookings from "../component/Dashboard/User/MyBookings";
-// import ErrorPage from "../pages/ErrorPage/ErrorPage";
-// import CarList from "../pages/CarList/CarList";
-// import CarViewDetails from "../pages/CarDetails/CarDetailsPage";
-// import CarBooking from "../pages/CarbookingPage/CarBookingPage";
-// import BookingConfirmation from "../pages/CarbookingPage/BookingConfirmationPage";
 
 export const router = createBrowserRouter([
   {
@@ -127,6 +117,7 @@ export const router = createBrowserRouter([
       </ProtectedRoutes>
     ),
     children: [
+      //admin routes
       {
         path: "add-product",
         element: (
@@ -152,6 +143,24 @@ export const router = createBrowserRouter([
         ),
       },
 
+      {
+        path: "admin-manage-order",
+        element: (
+          <ProtectedRoutes allowedRoles={["Admin"]}>
+            <AllOrdersAdmin />
+          </ProtectedRoutes>
+        ),
+      },
+      {
+        path: "admin-manage-payments",
+        element: (
+          <ProtectedRoutes allowedRoles={["Admin"]}>
+            <AllTransactionsAdmin />
+          </ProtectedRoutes>
+        ),
+      },
+
+      //vemdor routes
       {
         path: "vendor/add-product",
         element: (

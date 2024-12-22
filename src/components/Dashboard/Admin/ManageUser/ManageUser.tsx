@@ -15,6 +15,7 @@ const ManageUsers = () => {
   const { data: response, isLoading, error } = userApi.useGetAllUsersQuery({});
   const users = response?.data || [];
   const [updateUser] = userApi.useUpdateUserMutation();
+  console.log(users);
 
   // State for search input
   const [search, setSearch] = useState("");
@@ -88,6 +89,19 @@ const ManageUsers = () => {
           </span>
         ),
       }),
+      columnHelper.accessor("lastLoginAt", {
+        header: "Lastlogin",
+        cell: (info) => {
+          const date = new Date(info.getValue());
+          const formattedDate = date.toLocaleString(); // You can customize this format further
+          return (
+            <span className="px-2 py-1 text-xs font-semibold rounded-full bg-red-400 text-white	">
+              {formattedDate}
+            </span>
+          );
+        },
+      }),
+
       columnHelper.display({
         id: "status",
         header: "Status",

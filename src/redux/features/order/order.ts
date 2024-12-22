@@ -21,6 +21,16 @@ export const OrderApi = baseApi.injectEndpoints({
       },
       providesTags: ["order"],
     }),
+
+    getAllAdminorders: builder.query({
+      query: () => {
+        return {
+          url: "/order/All-orders-admin",
+          method: "GET",
+        };
+      },
+      providesTags: ["order"],
+    }),
     getVendororders: builder.query({
       query: () => ({
         url: `/order/vendor-orders`,
