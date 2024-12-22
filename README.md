@@ -14,6 +14,12 @@ This is the **React** frontend for the E-Commerce application. It allows users t
 
 ## :wrench: Installation
 
+1. **Live Link**:
+
+   ```bash
+   Live Link https://wahidsbdshop.netlify.app/
+   ```
+
 1. **Clone the repository**:
    ```bash
    git clone https://github.com/wahid1099/multi_vendor_ecom
