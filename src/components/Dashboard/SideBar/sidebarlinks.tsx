@@ -64,7 +64,7 @@ export const roleLinks: RoleLinks = {
     },
     {
       name: "Manage Reviews",
-      link: "/dashboard/manage-reviews",
+      link: "/dashboard/all-reviews-admin",
       icon: createIcon(MdOutlineRateReview),
     },
     {

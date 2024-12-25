@@ -22,6 +22,7 @@ import ManageProductsAdmin from "../components/Dashboard/Admin/products/ManagePr
 import AllOrdersAdmin from "../components/Dashboard/Admin/Allorders/AllOrdersAdmin.tsx";
 import ManageUsers from "../components/Dashboard/Admin/ManageUser/ManageUser.tsx";
 import AllTransactionsAdmin from "../components/Dashboard/Admin/AllTransections/AllTransections.tsx";
+import AllReviews from "../components/Dashboard/Admin/AllReviews/AllReviews.tsx";
 
 //vendor routes
 import MyShop from "../components/Dashboard/vendor/Myshop.tsx";
@@ -161,6 +162,14 @@ export const router = createBrowserRouter([
         element: (
           <ProtectedRoutes allowedRoles={["Admin"]}>
             <AllTransactionsAdmin />
+          </ProtectedRoutes>
+        ),
+      },
+      {
+        path: "all-reviews-admin",
+        element: (
+          <ProtectedRoutes allowedRoles={["Admin"]}>
+            <AllReviews />
           </ProtectedRoutes>
         ),
       },

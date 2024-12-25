@@ -14,33 +14,15 @@ import { TUser } from "@/type/global.type";
 const ManageUsers = () => {
   const { data: response, isLoading, error } = userApi.useGetAllUsersQuery({});
   const users = response?.data || [];
-  const [updateUser] = userApi.useUpdateUserMutation();
-  console.log(users);
+
+  const [suspendVendor] = userApi.useSuspendVednorMutation();
+  const [toggleUserDeletion] = userApi.useToggleUserDeletationMutation();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentAction, setCurrentAction] = useState<string | null>(null);
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
 
   // State for search input
   const [search, setSearch] = useState("");
-
-  // Handles blocking/suspending the user
-  const handleUserAction = async (userId: string, action: string) => {
-    try {
-      await updateUser({ userId, action });
-      Swal.fire({
-        icon: "success",
-        title: "Success",
-        text: `User has been ${action}ed!`,
-        showConfirmButton: false,
-        timer: 1500,
-      });
-    } catch {
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "Something went wrong",
-        showConfirmButton: false,
-        timer: 1500,
-      });
-    }
-  };
 
   const columnHelper = createColumnHelper<TUser>();
 
@@ -128,24 +110,32 @@ const ManageUsers = () => {
         header: "Actions",
         cell: (props) => (
           <div className="flex gap-2">
-            <button
-              className="px-3 py-1 text-sm font-medium text-yellow-700 bg-yellow-100 rounded hover:bg-yellow-200 disabled:opacity-50"
-              onClick={() =>
-                handleUserAction(props.row.original._id, "suspend")
-              }
-              disabled={
-                props.row.original.isSuspended || props.row.original.isDeleted
-              }
-            >
-              Suspend
-            </button>
-            <button
-              className="px-3 py-1 text-sm font-medium text-red-700 bg-red-100 rounded hover:bg-red-200 disabled:opacity-50"
-              onClick={() => handleUserAction(props.row.original._id, "delete")}
-              disabled={props.row.original.isDeleted}
-            >
-              Delete
-            </button>
+            {props.row.original.role === "Customer" && (
+              <button
+                className="px-3 py-1 text-sm font-medium text-red-700 bg-red-100 rounded hover:bg-red-200"
+                onClick={
+                  () =>
+                    props.row.original.isDeleted
+                      ? handleOpenModal("recover", props.row.original._id) // Recover deleted user
+                      : handleOpenModal("delete", props.row.original._id) // Delete user
+                }
+              >
+                {props.row.original.isDeleted ? "Recover" : "Delete"}
+              </button>
+            )}
+            {props.row.original.role === "Vendor" && (
+              <button
+                className="px-3 py-1 text-sm font-medium text-yellow-700 bg-yellow-100 rounded hover:bg-yellow-200"
+                onClick={
+                  () =>
+                    props.row.original.isSuspended
+                      ? handleOpenModal("unsuspend", props.row.original._id) // Unsuspend vendor
+                      : handleOpenModal("suspend", props.row.original._id) // Suspend vendor
+                }
+              >
+                {props.row.original.isSuspended ? "Unsuspend" : "Suspend"}
+              </button>
+            )}
           </div>
         ),
       }),
@@ -164,6 +154,47 @@ const ManageUsers = () => {
     },
     onGlobalFilterChange: setSearch,
   });
+
+  const handleOpenModal = (action: string, userId: string) => {
+    setCurrentAction(action);
+    setCurrentUserId(userId);
+    setIsModalOpen(true);
+  };
+  const handleActionConfirm = async () => {
+    if (currentAction && currentUserId) {
+      try {
+        if (currentAction === "suspend") {
+          await suspendVendor(currentUserId); // Suspend Vendor
+        } else if (currentAction === "unsuspend") {
+          // Logic for unsuspending the vendor
+          await suspendVendor(currentUserId); // Assuming the same mutation for both suspend and unsuspend
+        } else if (currentAction === "delete") {
+          await toggleUserDeletion(currentUserId); // Delete User
+        } else if (currentAction === "recover") {
+          // Logic to recover the deleted user
+          await toggleUserDeletion(currentUserId); // Assuming the same mutation for both delete and recover
+        }
+
+        Swal.fire({
+          icon: "success",
+          title: "Success",
+          text: `User has been ${currentAction}ed!`,
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        setIsModalOpen(false);
+      } catch {
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Something went wrong",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        setIsModalOpen(false);
+      }
+    }
+  };
 
   if (isLoading)
     return (
@@ -234,6 +265,30 @@ const ManageUsers = () => {
           </div>
         </div>
       </div>
+      {/* Modal for confirmation */}
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg">
+            <h3 className="text-lg font-semibold mb-4">
+              Are you sure you want to {currentAction} this user?
+            </h3>
+            <div className="flex justify-end gap-2">
+              <button
+                className="px-4 py-2 text-white bg-red-500 rounded"
+                onClick={handleActionConfirm}
+              >
+                Yes
+              </button>
+              <button
+                className="px-4 py-2 text-white bg-gray-500 rounded"
+                onClick={() => setIsModalOpen(false)}
+              >
+                No
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

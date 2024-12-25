@@ -32,5 +32,23 @@ export const userApi = baseApi.injectEndpoints({
       },
       invalidatesTags: ["user"],
     }),
+    suspendVednor: builder.mutation({
+      query: (vendorId: string) => {
+        return {
+          url: `/user/suspend-vendor/${vendorId}`,
+          method: "PATCH",
+        };
+      },
+      invalidatesTags: ["user"],
+    }),
+    toggleUserDeletation: builder.mutation({
+      query: (userId: string) => {
+        return {
+          url: `/user/deactivate-user/${userId}`,
+          method: "PATCH",
+        };
+      },
+      invalidatesTags: ["user"],
+    }),
   }),
 });

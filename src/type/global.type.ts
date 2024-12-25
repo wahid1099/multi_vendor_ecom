@@ -107,6 +107,7 @@ export type TReview = {
   _id: string;
   product: TProduct; // Refers to the Product ID
   user: TUser;
+  order: TOrder;
   shop: TShop; // Refers to the User ID (Customer)
   rating: number; // e.g., 1 to 5
   image: string;

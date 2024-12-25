@@ -15,7 +15,7 @@ export const ReviewApi = baseApi.injectEndpoints({
     getAllreviews: builder.query({
       query: () => {
         return {
-          url: "/reivew/",
+          url: "/reivew",
           method: "GET",
         };
       },
