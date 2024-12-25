@@ -31,6 +31,15 @@ export const couponApi = baseApi.injectEndpoints({
       },
       providesTags: ["coupon"],
     }),
+    validateCoupon: builder.query({
+      query: (code: string) => {
+        return {
+          url: `/coupon/validate-coupon/${code}`,
+          method: "GET",
+        };
+      },
+      providesTags: ["coupon"],
+    }),
 
     updateCoupon: builder.mutation({
       query: ({ id, CouponData }) => {

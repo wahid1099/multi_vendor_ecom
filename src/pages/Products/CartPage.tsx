@@ -8,9 +8,12 @@ import {
 } from "../../redux/features/Cart/cartSlice";
 import { OrderApi } from "../../redux/features/order/order";
 import { PaymentApi } from "../../redux/features/Payment/payment";
+import { couponApi } from "../../redux/features/coupon/coupon";
 import { useCurrentToken } from "../../redux/features/Auth/AuthSlice";
 import { userApi } from "../../redux/features/user/userApi";
 import { toast } from "sonner";
+import ClipLoader from "react-spinners/ClipLoader";
+
 interface CartItem {
   id: string;
   name: string;
@@ -24,9 +27,15 @@ interface CartItem {
 const CartPage = () => {
   const [createOrder] = OrderApi.useCreateOrderMutation();
   const [createPayment] = PaymentApi.useCreatepaymentMutation();
-  const token = useAppSelector(useCurrentToken);
+  const [coupon, setCoupon] = useState("");
+  const [isCouponLoading, setIsCouponLoading] = useState(false); // Add state for loading
+  const [errorMessage, setErrorMessage] = useState("");
 
-  // Fetch user details
+  const { data: validateData } = couponApi.useValidateCouponQuery(coupon, {
+    skip: !coupon, // Skip the query if coupon is empty
+  });
+
+  const token = useAppSelector(useCurrentToken);
   const { data: getMe } = userApi.useGetMeQuery(undefined, { skip: !token });
   const user = getMe?.data;
   const dispatch = useAppDispatch();
@@ -34,8 +43,7 @@ const CartPage = () => {
     (state) => state.cart
   );
 
-  const [coupon, setCoupon] = useState("");
-  const [error, setError] = useState("");
+  const [discount, setDiscount] = useState(0);
   const [paymentMethod, setPaymentMethod] = useState<"cod" | "online" | null>(
     null
   );
@@ -50,12 +58,32 @@ const CartPage = () => {
     }
   };
 
-  const handleApplyCoupon = () => {
-    if (coupon === "DISCOUNT10") {
-      dispatch(applyCoupon({ code: "DISCOUNT10", discount: 10 })); // Correct format
-      setError("");
-    } else {
-      setError("Invalid coupon code");
+  const handleApplyCoupon = async () => {
+    if (!coupon) {
+      setErrorMessage("Please enter a coupon code.");
+      return;
+    }
+
+    setIsCouponLoading(true); // Set loading state to true
+
+    try {
+      // Trigger the coupon validation manually if not already done
+      if (validateData?.success && validateData?.data?.discount) {
+        const { discount } = validateData.data;
+        dispatch(applyCoupon({ code: coupon, discount }));
+        setDiscount(discount);
+        setErrorMessage(""); // Clear any previous error
+        toast.success(`Coupon applied! You saved ${discount}%`);
+      } else {
+        setErrorMessage("Invalid or expired coupon code");
+        setDiscount(0);
+      }
+    } catch (err) {
+      console.error("Error validating coupon:", err);
+      setErrorMessage("Failed to validate coupon. Please try again.");
+      setDiscount(0);
+    } finally {
+      setIsCouponLoading(false); // Set loading state to false
     }
   };
 
@@ -88,8 +116,6 @@ const CartPage = () => {
 
       if (paymentMethod === "cod") {
         toast.success("Order placed successfully!");
-
-        // Clear cart after order
         dispatch(clearCart());
       } else if (paymentMethod === "online") {
         const paymentPayload = {
@@ -102,7 +128,6 @@ const CartPage = () => {
         const paymentResponse = await createPayment(paymentPayload).unwrap();
 
         if (paymentResponse?.data.paymentSession?.payment_url) {
-          // Redirect to payment gateway
           window.location.href =
             paymentResponse.data.paymentSession?.payment_url;
         } else {
@@ -115,13 +140,21 @@ const CartPage = () => {
     }
   };
 
+  // Calculate product-level discount and total discount
+  const productDiscountAmount = items.reduce(
+    (total, item) => total + (item.price * item.discount * item.quantity) / 100,
+    0
+  );
+
+  const totalAfterProductDiscount = totalPrice - productDiscountAmount;
+  const couponDiscountAmount = (totalAfterProductDiscount * discount) / 100;
+  const finalTotalAmount = totalAfterProductDiscount - couponDiscountAmount;
+
   return (
     <div className="p-4 md:p-8 max-w-6xl mx-auto">
       <h1 className="text-3xl font-bold mb-6 text-center">Your Cart</h1>
 
-      {/* Cart Content */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Cart Items */}
         <div className="lg:col-span-2">
           {items.length === 0 ? (
             <p className="text-gray-600 text-center">Your cart is empty.</p>
@@ -190,7 +223,6 @@ const CartPage = () => {
           )}
         </div>
 
-        {/* Cart Summary */}
         <div className="bg-gray-100 p-6 rounded-md shadow-md">
           <h3 className="text-xl font-bold mb-4">Cart Summary</h3>
           <div className="space-y-2">
@@ -199,26 +231,19 @@ const CartPage = () => {
               <span>${totalPrice.toFixed(2)}</span>
             </div>
             <div className="flex justify-between">
-              <span>Discount Applied:</span>
-              <span>
-                -$
-                {items
-                  .reduce(
-                    (total, item) =>
-                      total +
-                      (item.price * item.discount * item.quantity) / 100,
-                    0
-                  )
-                  .toFixed(2)}
-              </span>
+              <span>Product Discounts:</span>
+              <span>-${productDiscountAmount.toFixed(2)}</span>
+            </div>
+            <div className="flex justify-between">
+              <span>Coupon Discount:</span>
+              <span>-${couponDiscountAmount.toFixed(2)}</span>
             </div>
             <div className="flex justify-between font-semibold text-lg">
               <span>Total:</span>
-              <span>${totalPrice.toFixed(2)}</span>
+              <span>${finalTotalAmount.toFixed(2)}</span>
             </div>
           </div>
 
-          {/* Coupon Input */}
           <div className="mt-4">
             <h4 className="text-md font-semibold mb-2">Apply Coupon</h4>
             <div className="flex gap-2">
@@ -232,11 +257,25 @@ const CartPage = () => {
               <button
                 onClick={handleApplyCoupon}
                 className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+                disabled={isCouponLoading} // Disable button while loading
               >
                 Apply
               </button>
             </div>
-            {error && <p className="text-red-500 mt-2">{error}</p>}
+            {isCouponLoading && (
+              <div className="mt-2 text-center">
+                <ClipLoader size={20} color="#e93b16" />
+                <span className="ml-2">Validating coupon...</span>
+              </div>
+            )}
+            {errorMessage && (
+              <p className="text-red-500 mt-2">{errorMessage}</p>
+            )}
+            {discount > 0 && (
+              <p className="text-green-500 mt-2">
+                Coupon applied! You saved {discount}%.
+              </p>
+            )}
           </div>
 
           {/* Payment Options */}
