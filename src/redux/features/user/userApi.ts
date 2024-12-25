@@ -49,5 +49,14 @@ export const userApi = baseApi.injectEndpoints({
       },
       invalidatesTags: ["user"],
     }),
+    toggleFollowShop: builder.mutation({
+      query: (shopId: string) => {
+        return {
+          url: `/user/toggle-followshop/${shopId}`,
+          method: "POST",
+        };
+      },
+      invalidatesTags: ["user"],
+    }),
   }),
 });

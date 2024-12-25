@@ -4,7 +4,7 @@ import { toast } from "sonner";
 import { ProductApi } from "../../redux/features/products/ProductAPi";
 import { addToCart } from "../../redux/features/Cart/cartSlice";
 import { useState } from "react";
-import { FaShop, FaHeart } from "react-icons/fa6";
+import { FaShop } from "react-icons/fa6";
 
 import { useCurrentToken } from "../../redux/features/Auth/AuthSlice";
 import { useAppSelector } from "../../redux/hook";
@@ -175,10 +175,10 @@ const ProductDetails = () => {
               </div>
 
               {/* Follow Button */}
-              <button className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 transition">
+              {/* <button className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 transition">
                 <FaHeart className="text-white" />
                 <span className="font-medium">Follow</span>
-              </button>
+              </button> */}
             </div>
 
             <h1 className="text-4xl font-bold text-gray-800 mb-4">{name}</h1>

@@ -24,6 +24,9 @@ const ShopPage = () => {
     isError,
   } = ShopApi.useGetSingleShopQuery(id || "");
 
+  const [toggleFollowShop, { isLoading: isToggleLoading }] =
+    userApi.useToggleFollowShopMutation();
+
   if (isLoading) {
     return (
       <div className="flex justify-center items-center min-h-[60vh]">
@@ -40,7 +43,30 @@ const ShopPage = () => {
     );
   }
 
-  const { name, description, logo, products, shopFollowers } = shop.data;
+  const { name, description, logo, products, followers } = shop.data;
+
+  // const isFollowing = shopFollowers?.includes(user?._id);
+  const isFollowing = user?.followedShops?.includes(id);
+
+  const handleToggleFollow = async () => {
+    if (!user) {
+      toast.error("Please login to follow shops");
+      navigate("/login");
+      return;
+    }
+
+    try {
+      await toggleFollowShop(id || "").unwrap();
+      toast.success(
+        isFollowing
+          ? "You have unfollowed this shop"
+          : "You are now following this shop"
+      );
+    } catch (error) {
+      console.error("Error toggling follow status:", error);
+      toast.error("Failed to update follow status. Please try again.");
+    }
+  };
 
   const handleAddToCart = (product: TProduct) => {
     if (!user) {
@@ -100,7 +126,7 @@ const ShopPage = () => {
             <div className="text-center">
               <h3 className="text-xl font-semibold text-gray-800">Followers</h3>
               <p className="text-blue-600 text-lg font-bold">
-                {shopFollowers?.length || 0}
+                {followers?.length || 0}
               </p>
             </div>
             <div className="text-center">
@@ -112,8 +138,16 @@ const ShopPage = () => {
           </div>
 
           {/* Follow Button */}
-          <button className="mt-4 px-6 py-3 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition flex items-center justify-center gap-2 shadow-md">
-            <FaHeart /> Follow Shop
+          <button
+            onClick={handleToggleFollow}
+            disabled={isToggleLoading}
+            className={`mt-4 px-6 py-3 ${
+              isFollowing
+                ? "bg-red-500 hover:bg-red-600"
+                : "bg-blue-500 hover:bg-blue-600"
+            } text-white rounded-full transition flex items-center justify-center gap-2 shadow-md`}
+          >
+            <FaHeart /> {isFollowing ? "Unfollow Shop" : "Follow Shop"}
           </button>
         </div>
       </div>
