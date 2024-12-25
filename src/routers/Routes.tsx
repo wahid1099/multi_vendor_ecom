@@ -6,6 +6,7 @@ import ContactUs from "../pages/HomePage/ContactUsPage";
 import TermsConditions from "../pages/HomePage/TermsConditions";
 import PrivacyPolicy from "../pages/HomePage/PrivacyPolicy";
 import CartPage from "../pages/Products/CartPage.tsx";
+import ShopPage from "../pages/ShopPage/ShopPage.tsx";
 // import AboutUs from "../pages/AboutUsPage/AboutUs";
 // import ContactUs from "../pages/ContactUs/ContactUs";
 import RegistrationPage from "../pages/Register/RegistrationPage";
@@ -29,7 +30,7 @@ import ManageProducts from "../components/Dashboard/vendor/ManageProducts.tsx";
 import VendorOrdersTable from "../components/Dashboard/vendor/VendorOrdersTable.tsx";
 //customer routes
 import UserAllOrders from "../components/Dashboard/User/Allorders.tsx";
-
+import MyReviews from "../components/Dashboard/User/MyReviews.tsx";
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -101,6 +102,10 @@ export const router = createBrowserRouter([
       {
         path: "/product/:id",
         element: <ProductDetails />,
+      },
+      {
+        path: "/shop/:id",
+        element: <ShopPage />,
       },
 
       {
@@ -193,12 +198,21 @@ export const router = createBrowserRouter([
           </ProtectedRoutes>
         ),
       },
+      //customer
 
       {
         path: "my-orders",
         element: (
           <ProtectedRoutes allowedRoles={["Customer"]}>
             <UserAllOrders />
+          </ProtectedRoutes>
+        ),
+      },
+      {
+        path: "my-reviews",
+        element: (
+          <ProtectedRoutes allowedRoles={["Customer"]}>
+            <MyReviews />
           </ProtectedRoutes>
         ),
       },

@@ -16,7 +16,8 @@ const ProductDetails = () => {
   const dispatch = useDispatch();
   const [selectedImage, setSelectedImage] = useState(0);
   const [isZoomed, setIsZoomed] = useState(false);
-  const [quantity, setQuantity] = useState(1); // State for cart quantity
+  const [quantity, setQuantity] = useState(1);
+  const [selectedTab, setSelectedTab] = useState("description");
 
   const token = useAppSelector(useCurrentToken);
 
@@ -96,6 +97,10 @@ const ProductDetails = () => {
     if (quantity > 1) setQuantity(quantity - 1);
   };
 
+  const handleTabClick = (tab: string) => {
+    setSelectedTab(tab);
+  };
+
   return (
     <div className="max-w-7xl mx-auto p-6">
       <button
@@ -110,7 +115,7 @@ const ProductDetails = () => {
         >
           <path
             fillRule="evenodd"
-            d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
+            d="M9.707 16.707a1 1 001.414 0l6-6a1 1 0 010-1.414l-6-6a1 1 0 01-1.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
             clipRule="evenodd"
           />
         </svg>
@@ -149,24 +154,39 @@ const ProductDetails = () => {
 
         {/* Details Section */}
         <div className="flex-1 flex flex-col">
-          <div className="bg-white p-6 rounded-xl shadow-lg">
-            <div className="flex justify-between items-center mb-4">
-              <div className="flex items-center gap-2">
-                <h1 className="text-xl font-bold text-gray-800">
-                  <FaShop /> {product.data.shop.name}
-                </h1>
-                <button className="text-blue-500 flex items-center gap-1 hover:underline">
-                  Follow
-                </button>
+          <div className="bg-white p-6 mb-5 rounded-xl shadow-lg">
+            <div className="flex items-center gap-4">
+              {/* Shop Details */}
+              <div
+                className="flex items-center gap-3 cursor-pointer group"
+                onClick={() => navigate(`/shop/${product.data.shop._id}`)}
+              >
+                <div className="flex items-center justify-center w-12 h-12 bg-blue-100 rounded-full shadow-md">
+                  <FaShop className="text-blue-600 text-lg group-hover:text-blue-800 transition" />
+                </div>
+                <div>
+                  <h1 className="text-lg font-bold text-gray-800 group-hover:text-blue-600 transition">
+                    {product.data.shop.name}
+                  </h1>
+                  <span className="text-sm text-gray-500 group-hover:text-blue-400 transition">
+                    Visit Shop
+                  </span>
+                </div>
               </div>
-              <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">
-                {category}
-              </span>
+
+              {/* Follow Button */}
+              <button className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 transition">
+                <FaHeart className="text-white" />
+                <span className="font-medium">Follow</span>
+              </button>
             </div>
 
             <h1 className="text-4xl font-bold text-gray-800 mb-4">{name}</h1>
 
             <div className="flex items-center gap-2 mb-4">
+              <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">
+                {category}
+              </span>{" "}
               <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">
                 {inventory > 0 ? "In Stock" : "Out of Stock"}
               </span>
@@ -191,78 +211,94 @@ const ProductDetails = () => {
                 </span>
               )}
             </div>
-
-            <div className="prose max-w-none mb-6">
-              <h3 className="text-xl font-semibold mb-2">Description</h3>
-              <p className="text-gray-700">{description}</p>
-            </div>
-
-            <div className="space-y-4 mb-6">
-              <p className="text-gray-600">
-                Available Stock:{" "}
-                <span className="font-semibold">{inventory} units</span>
-              </p>
-
-              {/* Quantity Control */}
-              <div className="flex items-center gap-4 mb-4">
-                <button
-                  onClick={decreaseQuantity}
-                  className="px-4 py-2 bg-gray-200 text-gray-600 rounded-md"
-                  disabled={quantity <= 1}
-                >
-                  -
-                </button>
-                <span className="text-lg font-semibold">{quantity}</span>
-                <button
-                  onClick={increaseQuantity}
-                  className="px-4 py-2 bg-gray-200 text-gray-600 rounded-md"
-                  disabled={quantity >= inventory}
-                >
-                  +
-                </button>
-              </div>
-
-              <button
-                onClick={handleAddToCart}
-                disabled={inventory === 0}
-                className={`w-full py-3 rounded-lg text-white text-lg font-semibold transition ${
-                  inventory === 0
-                    ? "bg-gray-400 cursor-not-allowed"
-                    : "bg-green-500 hover:bg-green-600"
-                }`}
-              >
-                {inventory === 0 ? "Out of Stock" : "Add to Cart"}
-              </button>
-            </div>
           </div>
+          {/* Quantity Control */}
+          <div className="flex items-center gap-4 mb-4">
+            <button
+              onClick={decreaseQuantity}
+              className="px-4 py-2 bg-gray-200 text-gray-600 rounded-md"
+              disabled={quantity <= 1}
+            >
+              -
+            </button>
+            <span className="text-lg font-semibold">{quantity}</span>
+            <button
+              onClick={increaseQuantity}
+              className="px-4 py-2 bg-gray-200 text-gray-600 rounded-md"
+              disabled={quantity >= inventory}
+            >
+              +
+            </button>
+          </div>
+
+          <button
+            onClick={handleAddToCart}
+            disabled={inventory === 0}
+            className={`w-full py-3 rounded-lg text-white text-lg font-semibold transition ${
+              inventory === 0
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-green-500 hover:bg-green-600"
+            }`}
+          >
+            {inventory === 0 ? "Out of Stock" : "Add to Cart"}
+          </button>
         </div>
+
+        {/* New Card for Tabs */}
       </div>
 
-      {/* Review Section */}
+      {/* Description & Reviews Card */}
       <div className="bg-white p-6 mt-10 rounded-xl shadow-lg">
-        <h3 className="text-2xl font-semibold mb-4">Customer Reviews</h3>
-        <div className="flex gap-4 mb-4">
-          <div className="flex gap-2 items-center">
-            <img
-              src="https://via.placeholder.com/40"
-              alt="User"
-              className="w-10 h-10 rounded-full"
-            />
-            <div>
-              <h4 className="font-semibold text-gray-800">John Doe</h4>
-              <div className="flex items-center gap-1 text-yellow-500">
-                <FaHeart />
-                <FaHeart />
-                <FaHeart />
-                <FaHeart />
-                <FaHeart />
-              </div>
-            </div>
-          </div>
+        {/* Tab Navigation */}
+        <div className="flex border-b mb-4">
+          <button
+            onClick={() => handleTabClick("description")}
+            className={`py-2 px-6 text-lg font-semibold ${
+              selectedTab === "description" ? "border-b-2 border-blue-500" : ""
+            }`}
+          >
+            Description
+          </button>
+          <button
+            onClick={() => handleTabClick("reviews")}
+            className={`py-2 px-6 text-lg font-semibold ${
+              selectedTab === "reviews" ? "border-b-2 border-blue-500" : ""
+            }`}
+          >
+            Reviews
+          </button>
         </div>
-        <p className="text-gray-700">
-          This product is amazing! Highly recommend.
-        </p>
+
+        {/* Tab Content */}
+        {selectedTab === "description" && (
+          <div className="prose max-w-none mb-6">
+            <h3 className="text-xl font-semibold mb-2">Description</h3>
+            <p className="text-gray-700">{description}</p>
+          </div>
+        )}
+
+        {selectedTab === "reviews" && (
+          <div>
+            <h3 className="text-2xl font-semibold mb-4">Customer Reviews</h3>
+            <div className="flex gap-4 mb-4">
+              <div className="flex gap-2 items-center">
+                <img
+                  src="https://via.placeholder.com/40"
+                  alt="User"
+                  className="w-10 h-10 rounded-full object-cover"
+                />
+                <div>
+                  <p className="font-semibold">John Doe</p>
+                  <p className="text-sm text-gray-600">5 stars</p>
+                </div>
+              </div>
+              <p className="text-gray-700">
+                Excellent product! Very happy with the quality.
+              </p>
+            </div>
+            {/* More reviews can be added here */}
+          </div>
+        )}
       </div>
     </div>
   );

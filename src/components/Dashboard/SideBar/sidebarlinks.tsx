@@ -122,6 +122,11 @@ export const roleLinks: RoleLinks = {
       icon: createIcon(FiPackage),
     },
     {
+      name: "My Reviews ",
+      link: "/dashboard/my-reviews",
+      icon: createIcon(MdOutlineRateReview),
+    },
+    {
       name: "Profile",
       link: "/dashboard/profile",
       icon: createIcon(FiUser),

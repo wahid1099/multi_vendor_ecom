@@ -87,6 +87,7 @@ export type TOrder = {
   createdAt: string; // Order creation timestamp
   updatedAt: string; // Order last update timestamp
   payment?: TPayment | null; // Payment details (optional, may be null for COD)
+  isReviewed: boolean;
 };
 
 type PaymentStatus = "success" | "failed" | "pending";
@@ -103,10 +104,12 @@ export type TPayment = {
   updatedAt: Date;
 };
 export type TReview = {
-  id: string;
-  productId: string; // Refers to the Product ID
-  userId: string; // Refers to the User ID (Customer)
+  _id: string;
+  product: TProduct; // Refers to the Product ID
+  user: TUser;
+  shop: TShop; // Refers to the User ID (Customer)
   rating: number; // e.g., 1 to 5
+  image: string;
   comment?: string;
   createdAt: Date;
   updatedAt: Date;
