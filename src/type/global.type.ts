@@ -116,3 +116,14 @@ export type TReview = {
   createdAt: Date;
   updatedAt: Date;
 };
+
+export type TCoupon = {
+  _id?: string;
+  code: string;
+  discount: number;
+  validFrom: Date;
+  validUntil: Date;
+  shopId?: TShop;
+  createdAt: Date;
+  updatedAt: Date;
+};

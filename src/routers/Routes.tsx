@@ -26,6 +26,7 @@ import AllOrdersAdmin from "../components/Dashboard/Admin/Allorders/AllOrdersAdm
 import ManageUsers from "../components/Dashboard/Admin/ManageUser/ManageUser.tsx";
 import AllTransactionsAdmin from "../components/Dashboard/Admin/AllTransections/AllTransections.tsx";
 import AllReviews from "../components/Dashboard/Admin/AllReviews/AllReviews.tsx";
+import CreateCoupon from "../components/Dashboard/Admin/Coupons/CreateCuopon.tsx";
 
 //vendor routes
 import MyShop from "../components/Dashboard/vendor/Myshop.tsx";
@@ -183,6 +184,14 @@ export const router = createBrowserRouter([
         element: (
           <ProtectedRoutes allowedRoles={["Admin"]}>
             <AllReviews />
+          </ProtectedRoutes>
+        ),
+      },
+      {
+        path: "Manage-coupons-admin",
+        element: (
+          <ProtectedRoutes allowedRoles={["Admin"]}>
+            <CreateCoupon />
           </ProtectedRoutes>
         ),
       },

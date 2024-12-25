@@ -68,6 +68,11 @@ export const roleLinks: RoleLinks = {
       icon: createIcon(MdOutlineRateReview),
     },
     {
+      name: "Manage Coupons",
+      link: "/dashboard/Manage-coupons-admin",
+      icon: createIcon(MdOutlineRateReview),
+    },
+    {
       name: "Settings",
       link: "/dashboard/settings",
       icon: createIcon(FiSettings),

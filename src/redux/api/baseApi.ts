@@ -102,6 +102,7 @@ export const baseApi = createApi({
     "cart",
     "order",
     "review",
+    "coupon",
   ],
   endpoints: () => ({}),
 });
