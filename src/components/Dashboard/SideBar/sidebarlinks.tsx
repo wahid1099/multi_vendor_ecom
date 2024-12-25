@@ -105,6 +105,11 @@ export const roleLinks: RoleLinks = {
       icon: createIcon(CiShop),
     },
     {
+      name: "Profile",
+      link: "/dashboard/my-profile",
+      icon: createIcon(FiUser),
+    },
+    {
       name: "Home",
       link: "/",
       icon: createIcon(IoHome),
@@ -128,7 +133,7 @@ export const roleLinks: RoleLinks = {
     },
     {
       name: "Profile",
-      link: "/dashboard/profile",
+      link: "/dashboard/my-profile",
       icon: createIcon(FiUser),
     },
     {

@@ -18,6 +18,7 @@ export type TUser = {
   city?: string;
   state?: string;
   zipCode?: string;
+  addressBook?: string;
   country?: string;
 };
 

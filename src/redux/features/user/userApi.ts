@@ -23,15 +23,14 @@ export const userApi = baseApi.injectEndpoints({
       invalidatesTags: ["user"],
     }),
     updateUser: builder.mutation({
-      query: (data) => {
-        return {
-          url: "/auth/user-update",
-          method: "PUT",
-          body: data,
-        };
-      },
+      query: (data) => ({
+        url: `/user/update-my-profile/${data.id}`,
+        method: "PATCH",
+        body: data,
+      }),
       invalidatesTags: ["user"],
     }),
+
     suspendVednor: builder.mutation({
       query: (vendorId: string) => {
         return {

@@ -16,6 +16,9 @@ import ResetPassword from "../pages/LoginPage/ResetPasssword";
 import ProtectedRoutes from "./ProtectedRoutes.tsx";
 import ProductDetails from "../pages/Products/ProductsDetails.tsx";
 import DashboadLayout from "../layout/DashboadLayout";
+//common for all
+
+import ProfilePage from "../components/Dashboard/shared/Profiledashboard.tsx";
 //admin routes
 import AddProduct from "../components/Dashboard/Admin/products/AddProduct.tsx";
 import ManageProductsAdmin from "../components/Dashboard/Admin/products/ManageProducts.tsx";
@@ -123,6 +126,16 @@ export const router = createBrowserRouter([
       </ProtectedRoutes>
     ),
     children: [
+      //commong profile route
+      {
+        path: "my-profile",
+        element: (
+          <ProtectedRoutes allowedRoles={["Admin", "Vendor", "Customer"]}>
+            <ProfilePage />
+          </ProtectedRoutes>
+        ),
+      },
+      //
       //admin routes
       {
         path: "add-product",
