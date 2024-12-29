@@ -58,18 +58,18 @@ export const authApi = baseApi.injectEndpoints({
     }),
     resetPassword: builder.mutation({
       query: (data) => ({
-        url: "/auth/reset-password", // Ensure this matches your backend route
-        method: "PATCH", // PATCH is appropriate for updating a specific resource
+        url: "/auth/reset-password",
+        method: "PATCH",
         body: {
           id: data.userId,
-          token: data.token,
           password: data.password,
         },
         headers: {
-          "Content-Type": "application/json", // Ensure backend accepts JSON requests
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${data.token}`, // Include token here
         },
       }),
-      invalidatesTags: ["user"], // This invalidates cached data for `user` tag
+      invalidatesTags: ["user"],
     }),
   }),
 });
