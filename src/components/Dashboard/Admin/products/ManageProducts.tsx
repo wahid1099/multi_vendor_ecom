@@ -9,11 +9,14 @@ import {
 } from "@tanstack/react-table";
 import { ProductApi } from "../../../../redux/features/products/ProductAPi";
 import { TProduct } from "../../../../type/global.type";
-// import { useDispatch } from "react-redux";
+import slugify from "slugify";
+
 import Swal from "sweetalert2";
 import UpdateProductModal from "../../shared/UpdateProductModal"; // Import the modal component
 
 const ManageProductsAdmin = () => {
+  const [createProduct] = ProductApi.useCreateProductMutation(); // Mutation for creating a new product
+
   const [deleteProduct] = ProductApi.useDeleteProductMutation();
   const { data, isLoading, isError } = ProductApi.useGetAllAdminProdcutsQuery(
     {}
@@ -27,6 +30,34 @@ const ManageProductsAdmin = () => {
   const columnHelper = createColumnHelper<TProduct>();
 
   const columns = useMemo(() => {
+    const handleDuplicate = async (product: TProduct) => {
+      const { _id, ...rest } = product; // Use _ to indicate it's intentionally unused
+      console.log(_id);
+
+      try {
+        const newSlug = slugify(`${product.slug}-copy`, {
+          lower: true,
+          strict: true,
+        });
+
+        const newProduct = {
+          ...rest,
+          slug: newSlug,
+          name: `${product.name} (Copy)`, // Modify the name as needed
+        };
+
+        await createProduct(newProduct).unwrap();
+
+        Swal.fire(
+          "Duplicated!",
+          "Product has been duplicated successfully.",
+          "success"
+        );
+      } catch (error) {
+        console.error("Error duplicating product:", error);
+        Swal.fire("Error!", "Failed to duplicate the product.", "error");
+      }
+    };
     // Handle Delete action with SweetAlert confirmation
     const handleDelete = (id: string) => {
       Swal.fire({
@@ -136,11 +167,17 @@ const ManageProductsAdmin = () => {
             >
               Delete
             </button>
+            <button
+              className="px-2 py-1 text-white bg-green-500 rounded"
+              onClick={() => handleDuplicate(row.original)}
+            >
+              Duplicate
+            </button>
           </div>
         ),
       }),
     ];
-  }, [columnHelper, deleteProduct]); // Ensure that columnHelper and deleteProduct are in the dependency array
+  }, [columnHelper, deleteProduct, createProduct]);
 
   // Handle Edit and Delete actions
   const handleEdit = (product: TProduct) => {

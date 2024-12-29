@@ -5,9 +5,14 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { TProduct } from "@/type/global.type";
 import { ProductApi } from "../../../../redux/features/products/ProductAPi";
 import slugify from "slugify";
+import { ShopApi } from "../../../../redux/features/shop/shopApi";
+import { TShop } from "@/type/global.type";
 
 const AddProduct = () => {
   const [createProduct] = ProductApi.useCreateProductMutation();
+  const { data } = ShopApi.useGetAllShopsQuery([]);
+  const shops = data?.data || [];
+
   const [images, setImages] = useState<string[]>([]);
   const [isUploading, setIsUploading] = useState(false);
   const categories = [
@@ -91,6 +96,7 @@ const AddProduct = () => {
       category: data.category,
       slug,
       images,
+      shop: data.shop,
       price: Number(data.price),
       inventory: Number(data.inventory),
       discount: Number(data.discount),
@@ -145,6 +151,27 @@ const AddProduct = () => {
             />
             {errors.name && (
               <p className="mt-2 text-sm text-red-600">{errors.name.message}</p>
+            )}
+          </div>
+          <div>
+            <label className="block text-lg font-semibold text-gray-800 mb-2">
+              Select Shop
+            </label>
+            <select
+              className="w-full p-3 rounded-lg border border-gray-300 shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+              {...register("shop", { required: "Shop selection is required" })}
+            >
+              <option value="" disabled>
+                Select a shop
+              </option>
+              {shops.map((shop: TShop) => (
+                <option key={shop._id} value={shop._id}>
+                  {shop.name}
+                </option>
+              ))}
+            </select>
+            {errors.shop && (
+              <p className="mt-2 text-sm text-red-600">{errors.shop.message}</p>
             )}
           </div>
 
