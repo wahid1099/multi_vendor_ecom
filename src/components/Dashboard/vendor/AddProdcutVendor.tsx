@@ -9,6 +9,7 @@ import { useCurrentToken } from "../../../redux/features/Auth/AuthSlice";
 import { useAppSelector } from "../../../redux/hook";
 import { userApi } from "../../../redux/features/user/userApi";
 const AddProductVendor = () => {
+  
   const [createProduct] = ProductApi.useCreateProductMutation();
   const [images, setImages] = useState<string[]>([]);
   const [isUploading, setIsUploading] = useState(false);
