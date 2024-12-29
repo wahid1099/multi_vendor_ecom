@@ -52,6 +52,11 @@ export const roleLinks: RoleLinks = {
       icon: createIcon(MdManageHistory),
     },
     {
+      name: "Manage Shops",
+      link: "/dashboard/admin-manage-shops",
+      icon: createIcon(CiShop),
+    },
+    {
       name: "Manage Orders ",
       link: "/dashboard/admin-manage-order",
       icon: createIcon(BsShop),

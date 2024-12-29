@@ -47,5 +47,15 @@ export const ShopApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["shop"],
     }),
+
+    blackListShop: builder.mutation({
+      query: (shopId: string) => {
+        return {
+          url: `/shop/blacklist-shop/${shopId}`,
+          method: "PATCH",
+        };
+      },
+      invalidatesTags: ["shop"],
+    }),
   }),
 });
