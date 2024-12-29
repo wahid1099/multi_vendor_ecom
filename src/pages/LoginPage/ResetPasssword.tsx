@@ -1,18 +1,67 @@
 import { useState } from "react";
 import React from "react";
+import { authApi } from "../../redux/features/Auth/authAPi";
+import Swal from "sweetalert2";
+
+interface ApiError {
+  data?: {
+    message?: string;
+  };
+  status?: number;
+}
 
 const ResetPassword = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
+  const [resetPassword, { isLoading }] = authApi.useResetPasswordMutation();
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (password !== confirmPassword) {
       setError("Passwords do not match");
-    } else {
-      // Proceed with password reset logic
-      console.log("Password reset successfully");
+      return;
+    }
+
+    setError(""); // Clear previous errors
+
+    try {
+      const urlParams = new URLSearchParams(window.location.search);
+      const userId = urlParams.get("userId");
+      const token = urlParams.get("token");
+
+      if (!userId || !token) {
+        Swal.fire({
+          icon: "error",
+          title: "Invalid Link",
+          text: "The reset link is invalid or expired.",
+        });
+        return;
+      }
+
+      // Call the mutation
+      const response = await resetPassword({
+        userId,
+        token,
+        password,
+      }).unwrap();
+
+      // Success message
+      Swal.fire({
+        icon: "success",
+        title: "Success",
+        text: response.message || "Password reset successfully!",
+      });
+
+      // Redirect to login page (optional)
+      window.location.href = "/login";
+    } catch (err) {
+      const apiError = err as ApiError; // Explicitly cast error to ApiError
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: apiError.data?.message || "Failed to reset password!",
+      });
     }
   };
 
@@ -65,8 +114,9 @@ const ResetPassword = () => {
           <button
             type="submit"
             className="w-full bg-purple-600 text-white py-2 rounded-lg font-semibold hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500"
+            disabled={isLoading}
           >
-            Reset Password
+            {isLoading ? "Resetting..." : "Reset Password"}
           </button>
         </form>
       </div>

@@ -13,6 +13,16 @@ const AddProductVendor = () => {
   const [images, setImages] = useState<string[]>([]);
   const [isUploading, setIsUploading] = useState(false);
   const token = useAppSelector(useCurrentToken);
+  const categories = [
+    "Fashion",
+    "Electronics",
+    "Home Appliance",
+    "Furniture",
+    "Mobile",
+    "Headphones",
+    "Accessories",
+    "Camera & Photo",
+  ];
 
   // Fetch user details
   const { data: getMe } = userApi.useGetMeQuery(undefined, { skip: !token });
@@ -85,6 +95,7 @@ const AddProductVendor = () => {
     }
     const productData = {
       ...data,
+      category: data.category,
       slug,
       images,
       price: Number(data.price),
@@ -223,12 +234,20 @@ const AddProductVendor = () => {
             <label className="block text-lg font-semibold text-gray-800 mb-2">
               Category
             </label>
-            <input
-              type="text"
+            <select
               className="w-full p-3 rounded-lg border border-gray-300 shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
               {...register("category", { required: "Category is required" })}
-              placeholder="Enter product category"
-            />
+            >
+              <option value="" disabled>
+                Select a category
+              </option>
+              {categories.map((category) => (
+                <option key={category} value={category.toLowerCase()}>
+                  {category}
+                </option>
+              ))}
+            </select>
+
             {errors.category && (
               <p className="mt-2 text-sm text-red-600">
                 {errors.category.message}
