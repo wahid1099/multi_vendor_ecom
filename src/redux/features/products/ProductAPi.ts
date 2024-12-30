@@ -32,7 +32,7 @@ export const ProductApi = baseApi.injectEndpoints({
     getAllAdminProdcuts: builder.query({
       query: () => {
         return {
-          url: "product/all-products-admin",
+          url: "/product/all-products-admin",
           method: "GET",
         };
       },
@@ -42,7 +42,7 @@ export const ProductApi = baseApi.injectEndpoints({
     getAllVendorProducts: builder.query({
       query: () => {
         return {
-          url: "product/vendor-products",
+          url: "/product/vendor-products",
           method: "GET",
         };
       },
@@ -57,7 +57,7 @@ export const ProductApi = baseApi.injectEndpoints({
           search,
         });
         return {
-          url: `product/browseproducts?${params.toString()}`,
+          url: `/product/browseproducts?${params.toString()}`,
           method: "GET",
         };
       },

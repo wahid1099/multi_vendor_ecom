@@ -15,7 +15,7 @@ export const PaymentApi = baseApi.injectEndpoints({
     getAllpayments: builder.query({
       query: () => {
         return {
-          url: "payment/get-all-payments",
+          url: "/payment/get-all-payments",
           method: "GET",
         };
       },
