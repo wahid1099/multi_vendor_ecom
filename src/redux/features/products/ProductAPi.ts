@@ -5,9 +5,12 @@ interface BrowseProductsQuery {
   page?: number;
   limit?: number;
   search?: string;
+  category?: string;
+  minPrice?: number;
+  maxPrice?: number;
 }
 
-interface ProductResponse {
+export interface ProductResponse {
   success: boolean;
   data: TProduct[];
   meta: {
@@ -50,12 +53,23 @@ export const ProductApi = baseApi.injectEndpoints({
     }),
 
     getAllBrowseProducts: builder.query<ProductResponse, BrowseProductsQuery>({
-      query: ({ page = 1, limit = 10, search = "" } = {}) => {
+      query: ({
+        page = 1,
+        limit = 10,
+        search = "",
+        category = "",
+        minPrice = "",
+        maxPrice = "",
+      } = {}) => {
         const params = new URLSearchParams({
           page: String(page),
           limit: String(limit),
-          search,
+          ...(search && { search }), // Include `search` only if it's provided
+          ...(category && { category }), // Include `category` only if it's provided
+          ...(minPrice && { minPrice: String(minPrice) }), // Include `minPrice` only if it's provided
+          ...(maxPrice && { maxPrice: String(maxPrice) }), // Include `maxPrice` only if it's provided
         });
+
         return {
           url: `/product/browseproducts?${params.toString()}`,
           method: "GET",

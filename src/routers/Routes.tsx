@@ -16,6 +16,7 @@ import ResetPassword from "../pages/LoginPage/ResetPasssword";
 import ProtectedRoutes from "./ProtectedRoutes.tsx";
 import ProductDetails from "../pages/Products/ProductsDetails.tsx";
 import DashboadLayout from "../layout/DashboadLayout";
+import AllProducts from "../pages/Products/AllProducts.tsx";
 //common for all
 
 import ProfilePage from "../components/Dashboard/shared/Profiledashboard.tsx";
@@ -109,6 +110,12 @@ export const router = createBrowserRouter([
         path: "/product/:id",
         element: <ProductDetails />,
       },
+
+      {
+        path: "/all-products",
+        element: <AllProducts />,
+      },
+
       {
         path: "/shop/:id",
         element: <ShopPage />,

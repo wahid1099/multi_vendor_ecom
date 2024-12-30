@@ -9,6 +9,7 @@ import { FaShop } from "react-icons/fa6";
 import { useCurrentToken } from "../../redux/features/Auth/AuthSlice";
 import { useAppSelector } from "../../redux/hook";
 import { userApi } from "../../redux/features/user/userApi";
+import { TReview } from "@/type/global.type";
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -280,23 +281,32 @@ const ProductDetails = () => {
         {selectedTab === "reviews" && (
           <div>
             <h3 className="text-2xl font-semibold mb-4">Customer Reviews</h3>
-            <div className="flex gap-4 mb-4">
-              <div className="flex gap-2 items-center">
-                <img
-                  src="https://via.placeholder.com/40"
-                  alt="User"
-                  className="w-10 h-10 rounded-full object-cover"
-                />
-                <div>
-                  <p className="font-semibold">John Doe</p>
-                  <p className="text-sm text-gray-600">5 stars</p>
+            {product.data.reviews && product.data.reviews.length > 0 ? (
+              product.data.reviews.map((review: TReview, index: number) => (
+                <div key={index} className="flex gap-4 mb-4">
+                  <div className="flex gap-2 items-center">
+                    <img
+                      src={review.image}
+                      alt={review.user.name || "User"}
+                      className="w-10 h-10 rounded-full object-cover"
+                    />
+                    <div>
+                      <p className="font-semibold">
+                        {review.user.name || "Anonymous"}
+                      </p>
+                      <p className="text-sm text-gray-600">
+                        {review.rating} stars
+                      </p>
+                    </div>
+                  </div>
+                  <p className="text-gray-700">
+                    {review.comment || "No comment provided."}
+                  </p>
                 </div>
-              </div>
-              <p className="text-gray-700">
-                Excellent product! Very happy with the quality.
-              </p>
-            </div>
-            {/* More reviews can be added here */}
+              ))
+            ) : (
+              <p className="text-gray-700">No reviews for this product yet.</p>
+            )}
           </div>
         )}
       </div>
