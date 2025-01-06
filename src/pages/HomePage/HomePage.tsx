@@ -3,6 +3,8 @@ import BrowseProducts from "../../components/Home/BrowseProducts";
 import HomeBanner from "../../components/Home/Banner";
 import CategoryCards from "../../components/Home/CategoryCards";
 import ScrollToTop from "../../components/Home/ScrollToTop";
+import Newsletter from "../../components/Home/Newsletter";
+import BlogSlider from "../../components/Home/BlogSection";
 
 const HomePage = () => {
   return (
@@ -12,6 +14,8 @@ const HomePage = () => {
         <CategoryCards></CategoryCards>
         <HomeBanner></HomeBanner>
         <BrowseProducts></BrowseProducts>
+        <Newsletter></Newsletter>
+        <BlogSlider></BlogSlider>
       </div>
       <ScrollToTop></ScrollToTop>
     </div>
