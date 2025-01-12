@@ -61,7 +61,7 @@ export type TProduct = {
   variants: ProductVariant[]; // Array of variants for the product
   inventory: number;
   visibility: "active" | "inactive" | "archived"; // Product status
-
+  reviews: TReview[];
   createdAt: Date;
   updatedAt: Date;
 };

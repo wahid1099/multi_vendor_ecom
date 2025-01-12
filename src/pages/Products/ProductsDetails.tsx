@@ -5,6 +5,7 @@ import { ProductApi } from "../../redux/features/products/ProductAPi";
 import { addToCart } from "../../redux/features/Cart/cartSlice";
 import { useState } from "react";
 import { FaShop } from "react-icons/fa6";
+import { FaTruck, FaUndo, FaShieldAlt } from "react-icons/fa";
 
 import { useCurrentToken } from "../../redux/features/Auth/AuthSlice";
 import { useAppSelector } from "../../redux/hook";
@@ -116,7 +117,7 @@ const ProductDetails = () => {
         >
           <path
             fillRule="evenodd"
-            d="M9.707 16.707a1 1 001.414 0l6-6a1 1 0 010-1.414l-6-6a1 1 0 01-1.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
+            d="M9.707 16.707a1 1 0 001.414 0l6-6a1 1 0 010-1.414l-6-6a1 1 0 01-1.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
             clipRule="evenodd"
           />
         </svg>
@@ -130,7 +131,7 @@ const ProductDetails = () => {
             <img
               src={images[selectedImage]}
               alt={name}
-              className={`w-full h-[500px] object-cover rounded-xl shadow-xl cursor-zoom-in transition-transform duration-300 ${
+              className={`w-full h-[400px] object-cover rounded-xl shadow-xl cursor-zoom-in transition-transform duration-300 ${
                 isZoomed ? "scale-150" : "scale-100"
               }`}
               onClick={handleImageZoom}
@@ -156,7 +157,7 @@ const ProductDetails = () => {
         {/* Details Section */}
         <div className="flex-1 flex flex-col">
           <div className="bg-white p-6 mb-5 rounded-xl shadow-lg">
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-4 mb-6">
               {/* Shop Details */}
               <div
                 className="flex items-center gap-3 cursor-pointer group"
@@ -174,12 +175,6 @@ const ProductDetails = () => {
                   </span>
                 </div>
               </div>
-
-              {/* Follow Button */}
-              {/* <button className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 transition">
-                <FaHeart className="text-white" />
-                <span className="font-medium">Follow</span>
-              </button> */}
             </div>
 
             <h1 className="text-4xl font-bold text-gray-800 mb-4">{name}</h1>
@@ -212,12 +207,31 @@ const ProductDetails = () => {
                 </span>
               )}
             </div>
+
+            {/* Delivery and Refund Information */}
+            <div className="space-y-4 mb-6">
+              <div className="flex items-center gap-3 text-gray-700">
+                <FaTruck className="text-xl text-blue-500" />
+                <span>Estimated Delivery: 2-3 Business Days</span>
+              </div>
+
+              <div className="flex items-center gap-3 text-gray-700">
+                <FaUndo className="text-xl text-blue-500" />
+                <span>30-Day Easy Returns & Refunds</span>
+              </div>
+
+              <div className="flex items-center gap-3 text-gray-700">
+                <FaShieldAlt className="text-xl text-blue-500" />
+                <span>100% Secure Payment</span>
+              </div>
+            </div>
           </div>
+
           {/* Quantity Control */}
           <div className="flex items-center gap-4 mb-4">
             <button
               onClick={decreaseQuantity}
-              className="px-4 py-2 bg-gray-200 text-gray-600 rounded-md"
+              className="px-4 py-2 bg-gray-200 text-gray-600 rounded-md hover:bg-gray-300 transition"
               disabled={quantity <= 1}
             >
               -
@@ -225,7 +239,7 @@ const ProductDetails = () => {
             <span className="text-lg font-semibold">{quantity}</span>
             <button
               onClick={increaseQuantity}
-              className="px-4 py-2 bg-gray-200 text-gray-600 rounded-md"
+              className="px-4 py-2 bg-gray-200 text-gray-600 rounded-md hover:bg-gray-300 transition"
               disabled={quantity >= inventory}
             >
               +
@@ -244,8 +258,6 @@ const ProductDetails = () => {
             {inventory === 0 ? "Out of Stock" : "Add to Cart"}
           </button>
         </div>
-
-        {/* New Card for Tabs */}
       </div>
 
       {/* Description & Reviews Card */}
@@ -254,16 +266,20 @@ const ProductDetails = () => {
         <div className="flex border-b mb-4">
           <button
             onClick={() => handleTabClick("description")}
-            className={`py-2 px-6 text-lg font-semibold ${
-              selectedTab === "description" ? "border-b-2 border-blue-500" : ""
+            className={`py-2 px-6 text-lg font-semibold transition ${
+              selectedTab === "description"
+                ? "border-b-2 border-blue-500 text-blue-600"
+                : "text-gray-600 hover:text-blue-500"
             }`}
           >
             Description
           </button>
           <button
             onClick={() => handleTabClick("reviews")}
-            className={`py-2 px-6 text-lg font-semibold ${
-              selectedTab === "reviews" ? "border-b-2 border-blue-500" : ""
+            className={`py-2 px-6 text-lg font-semibold transition ${
+              selectedTab === "reviews"
+                ? "border-b-2 border-blue-500 text-blue-600"
+                : "text-gray-600 hover:text-blue-500"
             }`}
           >
             Reviews
@@ -275,6 +291,24 @@ const ProductDetails = () => {
           <div className="prose max-w-none mb-6">
             <h3 className="text-xl font-semibold mb-2">Description</h3>
             <p className="text-gray-700">{description}</p>
+
+            {/* Refund Instructions */}
+            <div className="mt-6 bg-gray-50 p-4 rounded-lg">
+              <h4 className="text-lg font-semibold mb-3">Refund Policy</h4>
+              <ul className="list-disc pl-5 space-y-2 text-gray-700">
+                <li>Items must be returned within 30 days of delivery</li>
+                <li>Product must be unused and in original packaging</li>
+                <li>Contact customer service to initiate return process</li>
+                <li>
+                  Refund will be processed within 5-7 business days after
+                  inspection
+                </li>
+                <li>
+                  Shipping costs for returns are buyer's responsibility unless
+                  item is defective
+                </li>
+              </ul>
+            </div>
           </div>
         )}
 
@@ -283,7 +317,10 @@ const ProductDetails = () => {
             <h3 className="text-2xl font-semibold mb-4">Customer Reviews</h3>
             {product.data.reviews && product.data.reviews.length > 0 ? (
               product.data.reviews.map((review: TReview, index: number) => (
-                <div key={index} className="flex gap-4 mb-4">
+                <div
+                  key={index}
+                  className="flex gap-4 mb-4 p-4 bg-gray-50 rounded-lg"
+                >
                   <div className="flex gap-2 items-center">
                     <img
                       src={review.image}

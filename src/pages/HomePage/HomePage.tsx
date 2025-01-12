@@ -8,15 +8,15 @@ import BlogSlider from "../../components/Home/BlogSection";
 
 const HomePage = () => {
   return (
-    <div className="mt-2">
+    <div className="mt-2 mb-10">
       <ImageCarousel></ImageCarousel>
       <div className="container mx-auto">
         <CategoryCards></CategoryCards>
         <HomeBanner></HomeBanner>
         <BrowseProducts></BrowseProducts>
         <Newsletter></Newsletter>
-        <BlogSlider></BlogSlider>
       </div>
+      <BlogSlider></BlogSlider>
       <ScrollToTop></ScrollToTop>
     </div>
   );
