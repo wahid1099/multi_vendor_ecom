@@ -10,14 +10,44 @@ import {
   X,
   Bell,
   ChevronDown,
+  Settings,
+  Package,
+  BarChart3,
+  Users,
+  LogIn,
+  LogOut,
+  Star,
+  Store,
+  LayoutDashboard,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { useAppSelector } from "@/redux/hook";
+import {
+  useCurrentToken,
+  selectCurrentUser,
+} from "@/redux/features/Auth/AuthSlice";
+import { userApi } from "@/redux/features/user/userApi";
 
 const ModernNavbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const navigate = useNavigate();
+
+  // Get auth state
+  const token = useAppSelector(useCurrentToken);
+  const currentUser = useAppSelector(selectCurrentUser);
+
+  // Fetch user data if token exists
+  const { data: userData } = userApi.endpoints.getMe.useQuery(
+    {},
+    {
+      skip: !token,
+    }
+  );
+
+  const user = userData?.data || currentUser;
+  const isLoggedIn = !!token && !!user;
 
   const navItems = [
     { name: "Home", href: "/" },
@@ -130,87 +160,225 @@ const ModernNavbar: React.FC = () => {
               </Badge>
             </Button>
 
-            {/* Profile Dropdown */}
+            {/* Profile Dropdown or Login */}
             <div className="relative">
-              <Button
-                variant="ghost"
-                className="flex items-center space-x-2"
-                onClick={() => setIsProfileOpen(!isProfileOpen)}
-              >
-                <User className="h-5 w-5" />
-                <ChevronDown className="h-4 w-4" />
-              </Button>
-
-              <AnimatePresence>
-                {isProfileOpen && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 10 }}
-                    className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-gray-200 py-2"
+              {isLoggedIn ? (
+                <>
+                  <Button
+                    variant="ghost"
+                    className="flex items-center space-x-2"
+                    onClick={() => setIsProfileOpen(!isProfileOpen)}
                   >
-                    <Link
-                      to="/dashboard/my-profile"
-                      className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
-                      onClick={() => setIsProfileOpen(false)}
-                    >
-                      <User className="h-4 w-4 mr-3" />
-                      My Profile
-                    </Link>
-                    <Link
-                      to="/dashboard/user-dashboard"
-                      className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
-                      onClick={() => setIsProfileOpen(false)}
-                    >
-                      <User className="h-4 w-4 mr-3" />
-                      User Dashboard
-                    </Link>
-                    <Link
-                      to="/dashboard/my-orders"
-                      className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
-                      onClick={() => setIsProfileOpen(false)}
-                    >
-                      <ShoppingCart className="h-4 w-4 mr-3" />
-                      My Orders
-                    </Link>
-                    <Link
-                      to="/wishlist"
-                      className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
-                      onClick={() => setIsProfileOpen(false)}
-                    >
-                      <Heart className="h-4 w-4 mr-3" />
-                      My Wishlist
-                    </Link>
-                    <Link
-                      to="/notifications"
-                      className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
-                      onClick={() => setIsProfileOpen(false)}
-                    >
-                      <Bell className="h-4 w-4 mr-3" />
-                      Notifications
-                    </Link>
-                    <Link
-                      to="/dashboard"
-                      className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
-                      onClick={() => setIsProfileOpen(false)}
-                    >
-                      <User className="h-4 w-4 mr-3" />
-                      Admin Dashboard
-                    </Link>
-                    <hr className="my-2" />
-                    <button
-                      onClick={() => {
-                        localStorage.removeItem("token");
-                        window.location.href = "/login";
-                      }}
-                      className="flex items-center w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50"
-                    >
-                      <X className="h-4 w-4 mr-3" />
-                      Sign Out
-                    </button>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+                    {user.profileImage ? (
+                      <img
+                        src={user.profileImage}
+                        alt={user.name}
+                        className="h-6 w-6 rounded-full object-cover"
+                      />
+                    ) : (
+                      <User className="h-5 w-5" />
+                    )}
+                    <span className="hidden md:block text-sm font-medium">
+                      {user.name}
+                    </span>
+                    <ChevronDown className="h-4 w-4" />
+                  </Button>
+
+                  <AnimatePresence>
+                    {isProfileOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 10 }}
+                        className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-gray-200 py-2"
+                      >
+                        {/* User Info */}
+                        <div className="px-4 py-2 border-b border-gray-100">
+                          <p className="text-sm font-medium text-gray-900">
+                            {user.name}
+                          </p>
+                          <p className="text-xs text-gray-500">{user.email}</p>
+                          <Badge variant="outline" className="mt-1 text-xs">
+                            {user.role}
+                          </Badge>
+                        </div>
+
+                        {/* Role-based menu items */}
+                        {user.role === "Customer" && (
+                          <>
+                            <Link
+                              to="/dashboard"
+                              className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                              onClick={() => setIsProfileOpen(false)}
+                            >
+                              <LayoutDashboard className="h-4 w-4 mr-3" />
+                              My Dashboard
+                            </Link>
+                            <Link
+                              to="/dashboard/my-profile"
+                              className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                              onClick={() => setIsProfileOpen(false)}
+                            >
+                              <User className="h-4 w-4 mr-3" />
+                              My Profile
+                            </Link>
+                            <Link
+                              to="/dashboard/my-orders"
+                              className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                              onClick={() => setIsProfileOpen(false)}
+                            >
+                              <Package className="h-4 w-4 mr-3" />
+                              My Orders
+                            </Link>
+                            <Link
+                              to="/wishlist"
+                              className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                              onClick={() => setIsProfileOpen(false)}
+                            >
+                              <Heart className="h-4 w-4 mr-3" />
+                              My Wishlist
+                            </Link>
+                            <Link
+                              to="/dashboard/my-reviews"
+                              className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                              onClick={() => setIsProfileOpen(false)}
+                            >
+                              <Star className="h-4 w-4 mr-3" />
+                              My Reviews
+                            </Link>
+                            <Link
+                              to="/dashboard/settings"
+                              className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                              onClick={() => setIsProfileOpen(false)}
+                            >
+                              <Settings className="h-4 w-4 mr-3" />
+                              Settings
+                            </Link>
+                          </>
+                        )}
+
+                        {user.role === "Admin" && (
+                          <>
+                            <Link
+                              to="/dashboard"
+                              className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                              onClick={() => setIsProfileOpen(false)}
+                            >
+                              <BarChart3 className="h-4 w-4 mr-3" />
+                              Admin Dashboard
+                            </Link>
+                            <Link
+                              to="/dashboard/manage-users"
+                              className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                              onClick={() => setIsProfileOpen(false)}
+                            >
+                              <Users className="h-4 w-4 mr-3" />
+                              Manage Users
+                            </Link>
+                            <Link
+                              to="/dashboard/admin-manage-products"
+                              className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                              onClick={() => setIsProfileOpen(false)}
+                            >
+                              <Package className="h-4 w-4 mr-3" />
+                              Manage Products
+                            </Link>
+                            <Link
+                              to="/dashboard/admin-manage-order"
+                              className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                              onClick={() => setIsProfileOpen(false)}
+                            >
+                              <ShoppingCart className="h-4 w-4 mr-3" />
+                              Manage Orders
+                            </Link>
+                            <Link
+                              to="/dashboard/my-profile"
+                              className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                              onClick={() => setIsProfileOpen(false)}
+                            >
+                              <User className="h-4 w-4 mr-3" />
+                              My Profile
+                            </Link>
+                          </>
+                        )}
+
+                        {user.role === "Vendor" && (
+                          <>
+                            <Link
+                              to="/dashboard"
+                              className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                              onClick={() => setIsProfileOpen(false)}
+                            >
+                              <BarChart3 className="h-4 w-4 mr-3" />
+                              Vendor Dashboard
+                            </Link>
+                            <Link
+                              to="/dashboard/add-product"
+                              className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                              onClick={() => setIsProfileOpen(false)}
+                            >
+                              <Package className="h-4 w-4 mr-3" />
+                              Add Product
+                            </Link>
+                            <Link
+                              to="/dashboard/vendor-manage-products"
+                              className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                              onClick={() => setIsProfileOpen(false)}
+                            >
+                              <Package className="h-4 w-4 mr-3" />
+                              My Products
+                            </Link>
+                            <Link
+                              to="/dashboard/vendor-orders"
+                              className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                              onClick={() => setIsProfileOpen(false)}
+                            >
+                              <ShoppingCart className="h-4 w-4 mr-3" />
+                              My Orders
+                            </Link>
+                            <Link
+                              to="/dashboard/my-shop"
+                              className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                              onClick={() => setIsProfileOpen(false)}
+                            >
+                              <Store className="h-4 w-4 mr-3" />
+                              My Shop
+                            </Link>
+                            <Link
+                              to="/dashboard/my-profile"
+                              className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                              onClick={() => setIsProfileOpen(false)}
+                            >
+                              <User className="h-4 w-4 mr-3" />
+                              My Profile
+                            </Link>
+                          </>
+                        )}
+
+                        <hr className="my-2" />
+                        <button
+                          onClick={() => {
+                            localStorage.removeItem("token");
+                            window.location.href = "/login";
+                          }}
+                          className="flex items-center w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50"
+                        >
+                          <LogOut className="h-4 w-4 mr-3" />
+                          Sign Out
+                        </button>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </>
+              ) : (
+                <Button
+                  onClick={() => navigate("/login")}
+                  className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700"
+                >
+                  <LogIn className="h-4 w-4 mr-2" />
+                  Login
+                </Button>
+              )}
             </div>
 
             {/* Mobile Menu Button */}

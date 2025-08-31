@@ -3,23 +3,22 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard,
-  Package,
   ShoppingCart,
-  Users,
-  BarChart3,
+  Heart,
+  User,
+  Star,
   LogOut,
   ChevronLeft,
   ChevronRight,
-  Store,
-  Tag,
-  FileText,
-  User,
+  Bell,
+  CreditCard,
+  MapPin,
+  Settings,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { useAppDispatch, useAppSelector } from "@/redux/hook";
-import { logOut, selectCurrentUser } from "@/redux/features/Auth/AuthSlice";
-import { userApi } from "@/redux/features/user/userApi";
+import { useAppDispatch } from "@/redux/hook";
+import { logOut } from "@/redux/features/Auth/AuthSlice";
 
 interface SidebarItem {
   icon: React.ReactNode;
@@ -29,126 +28,60 @@ interface SidebarItem {
   isActive?: boolean;
 }
 
-const ModernSidebar: React.FC = () => {
+const UserSidebar: React.FC = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const currentUser = useAppSelector(selectCurrentUser);
 
-  // Fetch user data
-  const { data: userData } = userApi.endpoints.getMe.useQuery(
-    {},
+  const sidebarItems: SidebarItem[] = [
     {
-      skip: !currentUser,
-    }
-  );
-
-  const user = userData?.data || currentUser;
-
-  // Get role-specific sidebar items
-  const getSidebarItems = (): SidebarItem[] => {
-    if (!user) return [];
-
-    if (user.role === "Admin") {
-      return [
-        {
-          icon: <LayoutDashboard className="h-5 w-5" />,
-          label: "Dashboard",
-          href: "/dashboard",
-        },
-        {
-          icon: <Package className="h-5 w-5" />,
-          label: "Add Product",
-          href: "/dashboard/add-product",
-        },
-        {
-          icon: <Package className="h-5 w-5" />,
-          label: "Manage Products",
-          href: "/dashboard/admin-manage-products",
-        },
-        {
-          icon: <ShoppingCart className="h-5 w-5" />,
-          label: "Orders",
-          href: "/dashboard/admin-manage-order",
-          badge: "12",
-        },
-        {
-          icon: <Users className="h-5 w-5" />,
-          label: "Users",
-          href: "/dashboard/manage-users",
-        },
-        {
-          icon: <Store className="h-5 w-5" />,
-          label: "Shops",
-          href: "/dashboard/admin-manage-shops",
-        },
-        {
-          icon: <Tag className="h-5 w-5" />,
-          label: "Coupons",
-          href: "/dashboard/Manage-coupons-admin",
-        },
-        {
-          icon: <BarChart3 className="h-5 w-5" />,
-          label: "Payments",
-          href: "/dashboard/admin-manage-payments",
-        },
-        {
-          icon: <FileText className="h-5 w-5" />,
-          label: "Reviews",
-          href: "/dashboard/all-reviews-admin",
-        },
-        {
-          icon: <User className="h-5 w-5" />,
-          label: "Profile",
-          href: "/dashboard/my-profile",
-        },
-      ];
-    } else if (user.role === "Vendor") {
-      return [
-        {
-          icon: <LayoutDashboard className="h-5 w-5" />,
-          label: "Dashboard",
-          href: "/dashboard",
-        },
-        {
-          icon: <Package className="h-5 w-5" />,
-          label: "Add Product",
-          href: "/dashboard/add-product",
-        },
-        {
-          icon: <Package className="h-5 w-5" />,
-          label: "My Products",
-          href: "/dashboard/vendor-manage-products",
-        },
-        {
-          icon: <ShoppingCart className="h-5 w-5" />,
-          label: "My Orders",
-          href: "/dashboard/vendor-orders",
-          badge: "5",
-        },
-        {
-          icon: <Store className="h-5 w-5" />,
-          label: "My Shop",
-          href: "/dashboard/my-shop",
-        },
-        {
-          icon: <FileText className="h-5 w-5" />,
-          label: "Reviews",
-          href: "/dashboard/vendor-reviews",
-        },
-        {
-          icon: <User className="h-5 w-5" />,
-          label: "Profile",
-          href: "/dashboard/my-profile",
-        },
-      ];
-    }
-
-    return [];
-  };
-
-  const sidebarItems = getSidebarItems();
+      icon: <LayoutDashboard className="h-5 w-5" />,
+      label: "Dashboard",
+      href: "/dashboard",
+    },
+    {
+      icon: <ShoppingCart className="h-5 w-5" />,
+      label: "My Orders",
+      href: "/dashboard/my-orders",
+      badge: "3",
+    },
+    {
+      icon: <Heart className="h-5 w-5" />,
+      label: "Wishlist",
+      href: "/wishlist",
+    },
+    {
+      icon: <Star className="h-5 w-5" />,
+      label: "My Reviews",
+      href: "/dashboard/my-reviews",
+    },
+    {
+      icon: <CreditCard className="h-5 w-5" />,
+      label: "Payment Methods",
+      href: "/dashboard/payment-methods",
+    },
+    {
+      icon: <MapPin className="h-5 w-5" />,
+      label: "Addresses",
+      href: "/dashboard/addresses",
+    },
+    {
+      icon: <Bell className="h-5 w-5" />,
+      label: "Notifications",
+      href: "/notifications",
+    },
+    {
+      icon: <User className="h-5 w-5" />,
+      label: "My Profile",
+      href: "/dashboard/my-profile",
+    },
+    {
+      icon: <Settings className="h-5 w-5" />,
+      label: "Account Settings",
+      href: "/dashboard/settings",
+    },
+  ];
 
   const handleLogout = () => {
     dispatch(logOut());
@@ -175,12 +108,10 @@ const ModernSidebar: React.FC = () => {
                 className="flex items-center space-x-2"
               >
                 <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-                  <span className="text-white font-bold text-sm">
-                    {user?.role === "Vendor" ? "V" : "A"}
-                  </span>
+                  <span className="text-white font-bold text-sm">U</span>
                 </div>
                 <span className="text-lg font-bold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
-                  {user?.role === "Vendor" ? "Vendor Panel" : "Admin Panel"}
+                  My Account
                 </span>
               </motion.div>
             )}
@@ -278,4 +209,4 @@ const ModernSidebar: React.FC = () => {
   );
 };
 
-export default ModernSidebar;
+export default UserSidebar;
