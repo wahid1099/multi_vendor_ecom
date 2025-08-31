@@ -12,7 +12,7 @@ export type TUser = {
   phone?: string;
   isSuspended: boolean;
   isDeleted: boolean;
-  lastLoginAt: string;
+  lastLoginAt?: string; // Made optional since it might not always be available
   createdAt: Date;
   updatedAt: Date;
   city?: string;

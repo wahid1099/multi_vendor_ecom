@@ -8,13 +8,17 @@ import { RouterProvider } from "react-router-dom";
 import { Toaster } from "sonner";
 import { PersistGate } from "redux-persist/integration/react";
 import { router } from "./routers/Routes.tsx";
+import ErrorBoundary from "./components/ErrorBoundary/ErrorBoundary.tsx";
+
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <RouterProvider router={router}></RouterProvider>
-      </PersistGate>
-    </Provider>
-    <Toaster />
+    <ErrorBoundary>
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+          <RouterProvider router={router}></RouterProvider>
+        </PersistGate>
+      </Provider>
+      <Toaster />
+    </ErrorBoundary>
   </StrictMode>
 );

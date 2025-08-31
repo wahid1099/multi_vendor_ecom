@@ -1,18 +1,16 @@
 import { Outlet } from "react-router-dom";
-import Navbar from "../shared/Navbar/Navbar";
-import InfoBar from "@/shared/Navbar/Bottom_Nav";
-import Footer from "../shared/Footer/Footer";
+import ModernNavbar from "../components/modern/ModernNavbar";
+import ModernFooter from "../components/modern/ModernFooter";
 
 const Main = () => {
   return (
     <>
-      <div>
-        <Navbar></Navbar>
-        <InfoBar></InfoBar>
-        <div className="pb-20 pt-18">
-          <Outlet></Outlet>
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+        <ModernNavbar />
+        <div className="pt-4">
+          <Outlet />
         </div>
-        <Footer></Footer>
+        <ModernFooter />
       </div>
     </>
   );

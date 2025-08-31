@@ -51,50 +51,91 @@ const BrowseProducts: React.FC = () => {
   };
 
   return (
-    <div className="container mx-auto p-12">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-800 mb-4">
+    <div className="container mx-auto px-4 py-12">
+      <div className="mb-12 text-center">
+        <h1 className="text-4xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent mb-4">
           Browse Products
         </h1>
-        <div className="max-w-md">
-          <input
-            type="text"
-            placeholder="Search products..."
-            value={searchTerm}
-            onChange={handleSearch}
-            className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
+        <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
+          Discover our amazing collection of products with unbeatable quality
+          and prices.
+        </p>
+        <div className="max-w-md mx-auto">
+          <div className="relative">
+            <input
+              type="text"
+              placeholder="Search products..."
+              value={searchTerm}
+              onChange={handleSearch}
+              className="w-full px-4 py-3 pl-12 rounded-full border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white/80 backdrop-blur-sm shadow-lg"
+            />
+            <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
+              <svg
+                className="h-5 w-5 text-gray-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                />
+              </svg>
+            </div>
+          </div>
         </div>
       </div>
 
       {products.length === 0 && !isLoading && (
-        <div className="text-center text-gray-600">
-          No products found. Try a different search.
+        <div className="text-center py-16">
+          <div className="text-6xl mb-4">🔍</div>
+          <h3 className="text-xl font-semibold text-gray-700 mb-2">
+            No products found
+          </h3>
+          <p className="text-gray-500">
+            Try a different search term or browse our categories.
+          </p>
         </div>
       )}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-        {products.map((product) => (
-          <ProductCard key={product._id} product={product} />
+        {products.map((product, index) => (
+          <div
+            key={product._id}
+            className="opacity-0 animate-fade-in"
+            style={{
+              animationDelay: `${index * 0.1}s`,
+              animationFillMode: "forwards",
+            }}
+          >
+            <ProductCard product={product} />
+          </div>
         ))}
       </div>
 
       {isLoading && (
-        <div className="flex justify-center my-8">
-          <div className="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+        <div className="flex flex-col items-center justify-center py-16">
+          <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mb-4"></div>
+          <p className="text-gray-600">Loading amazing products...</p>
         </div>
       )}
 
       {isFetching && !isLoading && (
         <div className="flex justify-center my-8">
-          <div className="w-8 h-8 border-3 border-gray-300 border-t-transparent rounded-full animate-spin"></div>
+          <div className="w-8 h-8 border-3 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
         </div>
       )}
 
       {!hasMore && products.length > 0 && (
-        <p className="text-center mt-8 text-gray-600">
-          You've reached the end of the list.
-        </p>
+        <div className="text-center mt-12 py-8">
+          <div className="text-4xl mb-4">🎉</div>
+          <p className="text-lg text-gray-600 font-medium">
+            You've seen all our amazing products!
+          </p>
+          <p className="text-gray-500">Check back later for new arrivals.</p>
+        </div>
       )}
     </div>
   );

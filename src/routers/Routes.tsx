@@ -29,6 +29,11 @@ import AllTransactionsAdmin from "../components/Dashboard/Admin/AllTransections/
 import AllReviews from "../components/Dashboard/Admin/AllReviews/AllReviews.tsx";
 import CreateCoupon from "../components/Dashboard/Admin/Coupons/CreateCuopon.tsx";
 import AllShopsTable from "../components/Dashboard/Admin/AllShops/AllShops.tsx";
+import AdminDashboard from "../components/Dashboard/AdminDashboard.tsx";
+import NotFoundPage from "../pages/ErrorPage/NotFoundPage.tsx";
+import WishlistPage from "../pages/Wishlist/WishlistPage.tsx";
+import NotificationsPage from "../pages/Notifications/NotificationsPage.tsx";
+import UserDashboardPage from "../pages/UserDashboard/UserDashboardPage.tsx";
 
 //vendor routes
 import MyShop from "../components/Dashboard/vendor/Myshop.tsx";
@@ -42,6 +47,7 @@ export const router = createBrowserRouter([
   {
     path: "/",
     element: <Main></Main>,
+    errorElement: <NotFoundPage />,
     children: [
       {
         path: "/",
@@ -125,6 +131,14 @@ export const router = createBrowserRouter([
         path: "/reset-password",
         element: <ResetPassword />,
       },
+      {
+        path: "/wishlist",
+        element: <WishlistPage />,
+      },
+      {
+        path: "/notifications",
+        element: <NotificationsPage />,
+      },
     ],
   },
   {
@@ -134,8 +148,18 @@ export const router = createBrowserRouter([
         <DashboadLayout />
       </ProtectedRoutes>
     ),
+    errorElement: <NotFoundPage />,
     children: [
-      //commong profile route
+      // Dashboard home route
+      {
+        index: true,
+        element: (
+          <ProtectedRoutes allowedRoles={["Admin", "Vendor", "Customer"]}>
+            <AdminDashboard />
+          </ProtectedRoutes>
+        ),
+      },
+      //common profile route
       {
         path: "my-profile",
         element: (
@@ -246,7 +270,14 @@ export const router = createBrowserRouter([
         ),
       },
       //customer
-
+      {
+        path: "user-dashboard",
+        element: (
+          <ProtectedRoutes allowedRoles={["Customer"]}>
+            <UserDashboardPage />
+          </ProtectedRoutes>
+        ),
+      },
       {
         path: "my-orders",
         element: (
@@ -295,9 +326,8 @@ export const router = createBrowserRouter([
       //       },
     ],
   },
-
-  //   {
-  //     path: "*",
-  //     element: <ErrorPage />,
-  //   },
+  {
+    path: "*",
+    element: <NotFoundPage />,
+  },
 ]);
