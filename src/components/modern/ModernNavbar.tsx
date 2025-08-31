@@ -212,7 +212,7 @@ const ModernNavbar: React.FC = () => {
                               onClick={() => setIsProfileOpen(false)}
                             >
                               <LayoutDashboard className="h-4 w-4 mr-3" />
-                              My Dashboard
+                              Dashboard
                             </Link>
                             <Link
                               to="/dashboard/my-profile"

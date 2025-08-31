@@ -29,11 +29,10 @@ import AllTransactionsAdmin from "../components/Dashboard/Admin/AllTransections/
 import AllReviews from "../components/Dashboard/Admin/AllReviews/AllReviews.tsx";
 import CreateCoupon from "../components/Dashboard/Admin/Coupons/CreateCuopon.tsx";
 import AllShopsTable from "../components/Dashboard/Admin/AllShops/AllShops.tsx";
-import AdminDashboard from "../components/Dashboard/AdminDashboard.tsx";
+import RoleBasedDashboard from "../components/Dashboard/RoleBasedDashboard.tsx";
 import NotFoundPage from "../pages/ErrorPage/NotFoundPage.tsx";
 import WishlistPage from "../pages/Wishlist/WishlistPage.tsx";
 import NotificationsPage from "../pages/Notifications/NotificationsPage.tsx";
-import UserDashboardPage from "../pages/UserDashboard/UserDashboardPage.tsx";
 
 //vendor routes
 import MyShop from "../components/Dashboard/vendor/Myshop.tsx";
@@ -155,7 +154,7 @@ export const router = createBrowserRouter([
         index: true,
         element: (
           <ProtectedRoutes allowedRoles={["Admin", "Vendor", "Customer"]}>
-            <AdminDashboard />
+            <RoleBasedDashboard />
           </ProtectedRoutes>
         ),
       },
@@ -270,14 +269,6 @@ export const router = createBrowserRouter([
         ),
       },
       //customer
-      {
-        path: "user-dashboard",
-        element: (
-          <ProtectedRoutes allowedRoles={["Customer"]}>
-            <UserDashboardPage />
-          </ProtectedRoutes>
-        ),
-      },
       {
         path: "my-orders",
         element: (
