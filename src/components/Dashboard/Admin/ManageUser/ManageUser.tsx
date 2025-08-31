@@ -74,8 +74,9 @@ const ManageUsers = () => {
       columnHelper.accessor("lastLoginAt", {
         header: "Lastlogin",
         cell: (info) => {
-          const date = new Date(info.getValue());
-          const formattedDate = date.toLocaleString(); // You can customize this format further
+          const value = info.getValue();
+          const date = value ? new Date(value) : null;
+          const formattedDate = date ? date.toLocaleString() : "Never"; // You can customize this format further
           return (
             <span className="px-2 py-1 text-xs font-semibold rounded-full bg-red-400 text-white	">
               {formattedDate}

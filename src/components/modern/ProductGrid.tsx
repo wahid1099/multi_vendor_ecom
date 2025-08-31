@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { Filter, Grid, List, Search, SlidersHorizontal } from "lucide-react";
+import { Grid, List, Search, SlidersHorizontal } from "lucide-react";
 import ProductCard from "./ProductCard";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";

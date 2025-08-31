@@ -1,4 +1,4 @@
-import React, { Component, ErrorInfo, ReactNode } from "react";
+import { Component, ErrorInfo, ReactNode } from "react";
 import { motion } from "framer-motion";
 import { RefreshCw, Home, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
